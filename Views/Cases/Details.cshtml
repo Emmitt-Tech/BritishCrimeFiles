@@ -341,57 +341,94 @@
 
             <!--People -->
             <div class="section-card">
-                <h2>People</h2>
+<h2>People</h2>
 
-                @if (Model.People.Any())
+@{
+    var offenders = Model.CasePeople
+        .Where(cp => cp.Role == "Offender")
+        .ToList();
+
+var victims = Model.CasePeople
+    .Where(cp => cp.Role == "Victim")
+    .OrderBy(cp => cp.SortOrder ?? int.MaxValue)
+    .ThenBy(cp => cp.Person!.LastName)
+    .ThenBy(cp => cp.Person!.FirstName)
+    .ToList();
+}
+
+@if (offenders.Any())
+{
+    <h3>Offenders</h3>
+
+    <div class="linked-people-grid">
+        @foreach (var casePerson in offenders)
+        {
+            var person = casePerson.Person!;
+            var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+            <a class="linked-person-card" asp-controller="People" asp-action="Details"
+               asp-route-id="@person.PersonId">
+
+                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
                 {
-                    <div class="linked-people-grid">
-                        @foreach (var person in Model.People)
-                        {
-                            var displayName = $"{person.FirstName} {person.LastName}".Trim();
-
-                            <a class="linked-person-card" asp-controller="People" asp-action="Details"
-                               asp-route-id="@person.PersonId">
-
-                                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                                {
-                                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-                                }
-                                else
-                                {
-                                    <div class="linked-person-photo no-photo-small">No photo</div>
-                                }
-
-                                <div class="linked-person-name">@displayName</div>
-
-                                @if (person.YearStarted != null || person.YearCaught != null)
-                                {
-                                    <div class="linked-person-meta">
-                                        @if (person.YearStarted != null)
-                                        {
-                                            <span>@person.YearStarted</span>
-                                        }
-                                        @if (person.YearStarted != null && person.YearCaught != null)
-                                        {
-                                            <span> - </span>
-                                        }
-                                        @if (person.YearCaught != null)
-                                        {
-                                            <span>@person.YearCaught</span>
-                                        }
-                                    </div>
-                                }
-                            </a>
-                        }
-                    </div>
+                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
                 }
                 else
                 {
-                    <p>No people linked yet.</p>
+                    <div class="linked-person-photo no-photo-small">No photo</div>
                 }
-            </div>
 
-            <!-- Books -->
+                <div class="linked-person-name">@displayName</div>
+
+                @if (person.YearStarted != null || person.YearCaught != null)
+                {
+                    <div class="linked-person-meta">
+                        @if (person.YearStarted != null)
+                        {
+                            <span>@person.YearStarted</span>
+                        }
+                        @if (person.YearStarted != null && person.YearCaught != null)
+                        {
+                            <span> - </span>
+                        }
+                        @if (person.YearCaught != null)
+                        {
+                            <span>@person.YearCaught</span>
+                        }
+                    </div>
+                }
+            </a>
+        }
+    </div>
+}
+
+@if (victims.Any())
+{
+    <h3>Victims</h3>
+
+    <div class="linked-people-grid">
+        @foreach (var casePerson in victims)
+        {
+            var person = casePerson.Person!;
+            var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+            <a class="linked-person-card" asp-controller="People" asp-action="Details"
+               asp-route-id="@person.PersonId">
+
+                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                {
+                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+                }
+                else
+                {
+                    <div class="linked-person-photo no-photo-small">No photo</div>
+                }
+
+                <div class="linked-person-name">@displayName</div>
+            </a>
+        }
+    </div>
+}            <!-- Books -->
             @if (Model.Books != null && Model.Books.Any())
             {
                 <hr class="section-divider" />

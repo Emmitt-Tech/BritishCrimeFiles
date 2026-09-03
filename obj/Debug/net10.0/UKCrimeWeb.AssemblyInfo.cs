@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UKCrimeWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d92089daa45246e47a1c5bde61b245c7d70493e2")]
 [assembly: System.Reflection.AssemblyProductAttribute("UKCrimeWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UKCrimeWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

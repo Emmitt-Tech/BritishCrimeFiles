@@ -7,5 +7,6 @@ namespace UKCrimeWeb.Models
         public string? Role { get; set; }
         public Case? Case { get; set; }
         public Person? Person { get; set; }
-    }
+        public int? SortOrder { get; set; }   
+         }
 }

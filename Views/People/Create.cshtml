@@ -1,0 +1,42 @@
+@model UKCrimeWeb.Models.CreatePersonViewModel
+
+@{
+    ViewData["Title"] = "Create Person";
+}
+
+<h1>Create Person</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <input asp-for="CaseId" type="hidden" />
+    <input asp-for="Role" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Nickname" class="form-label"></label>
+        <input asp-for="Nickname" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label">Order</label>
+        <input asp-for="SortOrder" class="form-control" type="number" min="1" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Photo" class="form-label"></label>
+        <input asp-for="Photo" type="file" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Create
+    </button>
+</form>
