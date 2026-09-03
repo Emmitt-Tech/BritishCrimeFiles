@@ -1,0 +1,27 @@
+@model UKCrimeWeb.Models.Programme
+
+@{
+    ViewData["Title"] = "Programme Details";
+}
+
+<h1>@Model.Title</h1>
+
+@if (Model.BroadcastYear.HasValue)
+{
+    <p><strong>Broadcast year:</strong> @Model.BroadcastYear</p>
+}
+
+@if (Model.RuntimeMinutes.HasValue)
+{
+    <p><strong>Runtime:</strong> @Model.RuntimeMinutes minutes</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.FilePath))
+{
+    <p><strong>File:</strong> @Model.FilePath</p>
+}
+
+@if (Model.Subtitles.HasValue)
+{
+    <p><strong>Subtitles:</strong> @(Model.Subtitles.Value ? "Yes" : "No")</p>
+}

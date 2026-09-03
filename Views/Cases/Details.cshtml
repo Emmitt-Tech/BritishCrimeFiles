@@ -1,0 +1,443 @@
+@model UKCrimeWeb.Models.CaseDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Case?.Title ?? "Case Details";
+}
+
+
+<style>
+    .timeline-popup {
+        display: none;
+    }
+
+    .timeline-row:hover .timeline-popup {
+        display: block;
+    }
+</style>
+
+<style>
+    .case-timeline-section {
+        margin-top: 3rem;
+    }
+
+    .case-timeline-section h2 {
+        margin-bottom: 1.5rem;
+    }
+
+    .case-timeline {
+        position: relative;
+        max-width: 900px;
+        padding-left: 56px;
+    }
+
+    .case-timeline::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #bdbdbd;
+    }
+
+    .case-timeline-item {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .case-timeline-dot {
+        position: absolute;
+        left: 9px;
+        top: 6px;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border: 3px solid #222;
+        border-radius: 50%;
+        box-sizing: border-box;
+        z-index: 2;
+    }
+
+    .case-timeline-main {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 1rem;
+        align-items: start;
+    }
+
+    .case-timeline-date {
+        font-weight: 600;
+        color: #666;
+        line-height: 1.4;
+        white-space: nowrap;
+    }
+
+    .case-timeline-body {
+        position: relative;
+        min-width: 0;
+    }
+
+    .case-timeline-title {
+        font-weight: 600;
+        color: #111;
+        line-height: 1.4;
+    }
+
+    .case-timeline-popup {
+        display: none;
+        margin-top: 0.5rem;
+        max-width: 550px;
+        padding: 0.85rem 1rem;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .case-timeline-popup p {
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .case-timeline-item:hover .case-timeline-popup {
+        display: block;
+    }
+</style>
+
+<style>
+    .case-details-columns {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    .case-left-column {
+        position: sticky;
+        top: 1.5rem;
+    }
+
+    .case-right-column {
+        min-width: 0;
+    }
+
+    /* keep your existing hover */
+    .timeline-popup {
+        display: none;
+    }
+
+    .timeline-row:hover .timeline-popup {
+        display: block;
+    }
+
+    @@media (max-width: 900px) {
+        .case-details-columns {
+            grid-template-columns: 1fr;
+        }
+
+        .case-left-column {
+            position: static;
+        }
+    }
+</style>
+<!-- END CSS -->
+
+<!-- Hero banner -->
+<div class="case-hero"
+     style="background-image:url('@(string.IsNullOrWhiteSpace(Model.Case?.ImagePath) ? "/images/cases/saddleworth-moor.jpg" : Model.Case.ImagePath)')">
+
+    <div class="case-hero-overlay">
+        <h1>@Model.Case?.Title</h1>
+
+        <p class="case-subtitle">
+            @Model.Case?.Location
+            @if (Model.Case?.YearStarted != null || Model.Case?.YearEnded != null)
+            {
+                <span> • </span>
+                <span>@Model.Case?.YearStarted</span>
+
+                @if (Model.Case?.YearStarted != null && Model.Case?.YearEnded != null)
+                {
+                    <span>–</span>
+                }
+                <span>@Model.Case?.YearEnded</span>
+            }
+        </p>
+
+        <div class="case-stats">
+            @if (Model.Case?.VictimCount != null)
+            {
+                <span>👥 @Model.Case.VictimCount victims</span>
+            }
+            <span>✔ Solved</span>
+        </div>
+    </div>
+</div>
+
+<!-- Key facts section -->
+<div class="person-page">
+    <div class="case-details-columns">
+
+        <div class="case-left-column">
+
+            <!-- Timeline section -->
+            <section style="margin-top: 3rem;">
+                <h2 style="margin-bottom: 1.5rem;">Timeline</h2>
+
+                <div style="position: relative; max-width: 100%; padding-left: 63px;">
+                    <div style="position: absolute; left: 14px; top: 0; bottom: 0; width: 3px; background: #bdbdbd;">
+                    </div>
+
+                    @foreach (var item in Model.TimelineEvents)
+                    {
+                        <div class="timeline-row" style="position: relative; margin-bottom: 1.5rem;">
+                            <div
+                                style="position: absolute; left: -55px; top: 6px; width: 14px; height: 14px; background: #fff; border: 3px solid #222; border-radius: 50%; box-sizing: border-box; z-index: 2;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 82px 1fr; gap: 0.5rem; align-items: start;">
+                                <div style="font-weight: 600; color: #666; line-height: 1.4; white-space: nowrap;">
+                                    @(string.IsNullOrWhiteSpace(item.DisplayDate)
+                                        ? item.EventDate?.ToString("dd MMM yyyy")
+                                        : item.DisplayDate)
+                                </div>
+
+                                <div>
+                                    <div style="font-weight: 600; color: #111; line-height: 1.4;">
+                                        @item.Title
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                                    {
+                                        <!-- Timeline description block-->
+                                        <div class="timeline-popup"
+                                             style="margin-top: 0.5rem; max-width: 550px; padding: 0.85rem 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                                            <p style="margin: 0; line-height: 1.5;">@item.Description</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+        <div class="case-right-column">
+            @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
+            {
+                <div class="section-card">
+                    <div class="case-key-facts-layout">
+
+                        <div class="case-lead-people">
+                            @{
+                                var leadPeople = Model.CasePeople
+                                    .Where(cp => cp.Role == "Offender")
+                                    .Take(2)
+                                    .ToList();
+                            }
+                            @if (leadPeople.Any())
+                            {
+                                <div class="case-lead-people-list">
+                                    @foreach (var casePerson in leadPeople)
+                                    {
+                                        var person = casePerson.Person!;
+                                        var displayName = $"{person.FirstName} {person.LastName}".Trim();
+                                        <a class="case-lead-person" asp-controller="People" asp-action="Details"
+                                           asp-route-id="@person.PersonId">
+                                            @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                                            {
+                                                <img src="@person.PhotoPath" alt="@displayName" class="case-lead-person-photo" />
+                                            }
+                                            else
+                                            {
+                                                <div class="case-lead-person-photo case-lead-person-no-photo">No photo</div>
+                                            }
+
+                                            
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="case-key-facts">
+                            <h2>Key Facts</h2>
+
+                            <div class="case-facts-grid">
+                                @if (!string.IsNullOrWhiteSpace(Model.Case?.Location))
+                                {
+                                    <div class="fact-item">
+                                        <div class="fact-label">Location</div>
+                                        <div class="fact-value">@Model.Case.Location</div>
+                                    </div>
+                                }
+
+                                @if (Model.Case?.VictimCount != null)
+                                {
+                                    <div class="fact-item">
+                                        <div class="fact-label">Victims</div>
+                                        <div class="fact-value">@Model.Case.VictimCount</div>
+                                    </div>
+                                }
+
+                                @if (Model.Case?.YearStarted != null || Model.Case?.YearEnded != null)
+                                {
+                                    <div class="fact-item">
+                                        <div class="fact-label">Years active</div>
+                                        <div class="fact-value">
+                                            @if (Model.Case?.YearStarted != null && Model.Case?.YearEnded != null)
+                                            {
+                                                @($"{Model.Case.YearStarted} - {Model.Case.YearEnded}")
+                                            }
+                                            else if (Model.Case?.YearStarted != null)
+                                            {
+                                                @($"{Model.Case.YearStarted} -")
+                                            }
+                                            else
+                                            {
+                                                @($"- {Model.Case?.YearEnded}")
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Case.Sentence))
+                                {
+                                    <div class="fact-item">
+                                        <div class="fact-label">Sentence</div>
+                                        <div class="fact-value">@Model.Case.Sentence</div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Overview</h2>
+
+                    <!-- Overview  - short -->
+                    @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
+                    {
+                        <div class="case-overview">
+                            @Model.Case.Summary
+                        </div>
+                    }
+
+                    <!-- Overview - long -->
+                    @if (!string.IsNullOrWhiteSpace(Model.Case?.SummaryFull))
+                    {
+                        <details class="case-overview-full">
+                            <summary class="overview-toggle">
+                                <span class="overview-toggle-text">Continue reading</span>
+                            </summary>
+
+                            <div class="case-overview-expanded">
+                                @Model.Case.SummaryFull
+                            </div>
+                        </details>
+                    }
+                </div>
+            }
+
+
+            <!--People -->
+            <div class="section-card">
+                <h2>People</h2>
+
+                @if (Model.People.Any())
+                {
+                    <div class="linked-people-grid">
+                        @foreach (var person in Model.People)
+                        {
+                            var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+                            <a class="linked-person-card" asp-controller="People" asp-action="Details"
+                               asp-route-id="@person.PersonId">
+
+                                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                                {
+                                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+                                }
+                                else
+                                {
+                                    <div class="linked-person-photo no-photo-small">No photo</div>
+                                }
+
+                                <div class="linked-person-name">@displayName</div>
+
+                                @if (person.YearStarted != null || person.YearCaught != null)
+                                {
+                                    <div class="linked-person-meta">
+                                        @if (person.YearStarted != null)
+                                        {
+                                            <span>@person.YearStarted</span>
+                                        }
+                                        @if (person.YearStarted != null && person.YearCaught != null)
+                                        {
+                                            <span> - </span>
+                                        }
+                                        @if (person.YearCaught != null)
+                                        {
+                                            <span>@person.YearCaught</span>
+                                        }
+                                    </div>
+                                }
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No people linked yet.</p>
+                }
+            </div>
+
+            <!-- Books -->
+            @if (Model.Books != null && Model.Books.Any())
+            {
+                <hr class="section-divider" />
+
+                <section class="books-section">
+                    <div class="books-header">
+                        <h2>Books</h2>
+
+                        <div class="books-hint">
+                            <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo-inline" />
+                            <span>Order on Amazon</span>
+                        </div>
+                    </div>
+
+                    <div class="books-row">
+                        @foreach (var book in Model.Books)
+                        {
+                            <div class="book-card">
+                                @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+                                {
+                                    @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+                                    {
+                                        <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
+                                            <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                    }
+                                }
+
+                                <div class="book-card-title">
+                                    @book.Title
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+    </div>
+</div>
+</div>
+
+
+<p>
+    <a asp-controller="Home" asp-action="Index">Back to home</a>
+</p>

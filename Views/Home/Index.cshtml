@@ -1,0 +1,34 @@
+﻿@model List<UKCrimeWeb.Models.Case>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>UK Crime Database</h1>
+
+<div class="case-grid">
+    @foreach (var crimeCase in Model)
+    {
+        <a class="case-card" asp-controller="Cases" asp-action="Details" asp-route-id="@crimeCase.CaseId">
+
+            <div class="case-card-image">
+                @if (!string.IsNullOrWhiteSpace(crimeCase.ImagePath))
+                {
+                    <img src="@crimeCase.ImagePath" alt="@crimeCase.Title" />
+                }
+                else
+                {
+                    <div class="no-photo">No image</div>
+                }
+
+                <div class="case-card-overlay">
+                    <div class="case-card-title">@crimeCase.Title</div>
+
+                   
+                </div>
+            </div>
+
+        
+        </a>
+    }
+</div>

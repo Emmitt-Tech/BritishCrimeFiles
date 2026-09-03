@@ -1,0 +1,70 @@
+@model UKCrimeWeb.Models.SearchResultsViewModel
+
+@{
+    ViewData["Title"] = "Cases";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Search))
+{
+    <h1>Results for "@Model.Search"</h1>
+}
+else
+{
+    <h1>Cases</h1>
+}
+
+@if (!Model.Cases.Any())
+{
+    <p>No cases found.</p>
+}
+else
+{
+    <h2>Cases</h2>
+
+    <div class="case-grid">
+        @foreach (var c in Model.Cases)
+        {
+            <a asp-controller="Cases" asp-action="Details" asp-route-id="@c.CaseId" class="case-card">
+                <div class="case-card-image">
+                    @if (!string.IsNullOrWhiteSpace(c.ImagePath))
+                    {
+                        <img src="@c.ImagePath" alt="@c.Title" />
+                    }
+                    else
+                    {
+                        <div class="no-photo">No image</div>
+                    }
+
+                    <div class="case-card-overlay">
+                        <div class="case-card-title">@c.Title</div>
+                        <div class="case-card-meta">@c.Location</div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+
+@if (Model.People.Any())
+{
+    <h2 style="margin-top:30px;">People</h2>
+
+    <div class="linked-people-grid">
+        @foreach (var p in Model.People)
+        {
+            <a asp-controller="People" asp-action="Details" asp-route-id="@p.PersonId" class="linked-person-card">
+
+                @if (!string.IsNullOrWhiteSpace(p.PhotoPath))
+                {
+                    <img src="@p.PhotoPath" alt="@p.FirstName @p.LastName" class="linked-person-photo" />
+                }
+                else
+                {
+                    <div class="linked-person-photo no-photo-small">No image</div>
+                }
+
+                <div class="linked-person-name">@p.FirstName @p.LastName</div>
+            </a>
+        }
+    </div>
+}

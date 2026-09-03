@@ -1,0 +1,150 @@
+@model UKCrimeWeb.Models.PersonDetailsViewModel
+
+@{
+    var displayName = $"{Model.Person?.FirstName} {Model.Person?.LastName}".Trim();
+    ViewData["Title"] = displayName;    
+}
+
+
+<div class="person-page">
+    <div class="person-header">
+        <div class="person-photo">
+    @if (!string.IsNullOrWhiteSpace(Model.Person?.PhotoPath))
+    {
+        <img src="@Model.Person.PhotoPath" alt="@displayName" />
+    }
+    else
+    {
+        <div class="no-photo">No photo available</div>
+    }
+</div>
+
+        <div class="person-facts">
+            <h1>@displayName</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Person?.Nickname))
+            {
+                <div class="fact-row">
+                    <div class="fact-label">Nickname</div>
+                    <div>@Model.Person.Nickname</div>
+                </div>
+            }
+
+            @if (Model.Person?.YearStarted != null)
+            {
+                <div class="fact-row">
+                    <div class="fact-label">Year started</div>
+                    <div>@Model.Person.YearStarted</div>
+                </div>
+            }
+
+            @if (Model.Person?.YearCaught != null)
+            {
+                <div class="fact-row">
+                    <div class="fact-label">Year caught</div>
+                    <div>@Model.Person.YearCaught</div>
+                </div>
+            }
+
+            @if (Model.Person?.NumberOfVictims != null)
+            {
+                <div class="fact-row">
+                    <div class="fact-label">Number of victims</div>
+                    <div>@Model.Person.NumberOfVictims</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Person?.Biography))
+    {
+        <div class="section-card">
+            <h2>Biography</h2>
+            <div class="biography-text">@Model.Person.Biography</div>
+        </div>
+    }
+
+    <div class="section-card">
+        <h2>Programmes</h2>
+
+        @if (Model.Programmes.Any())
+        {
+            <ul class="programme-list">
+                @foreach (var programme in Model.Programmes)
+                {
+                    <li class="programme-item">
+                        <a class="programme-link"
+   asp-controller="Programme"
+   asp-action="Details"
+   asp-route-id="@programme.ProgrammeId">
+    @programme.Title
+</a>
+
+                        @if (programme.BroadcastYear.HasValue)
+                        {
+                            <span class="programme-meta">(@programme.BroadcastYear)</span>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No programmes linked yet.</p>
+        }
+    </div>
+</div>
+    @if (Model.Books != null && Model.Books.Any())
+{
+    <section class="books-section">
+        <h2>Books</h2>
+
+        <div class="books-row">
+            @foreach (var book in Model.Books)
+            {
+                <div class="book-card">
+                    @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+{
+    if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+    {
+        <a href="@book.PurchaseUrl"
+           target="_blank"
+           rel="noopener noreferrer sponsored">
+            <img src="@book.ImageUrl"
+                 alt="@book.Title"
+                 class="book-card-image" />
+        </a>
+    }
+    else
+    {
+        <img src="@book.ImageUrl"
+             alt="@book.Title"
+             class="book-card-image" />
+    }
+}
+
+                    <div class="book-card-title">
+                        @book.Title
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+                    {
+                        <a href="@book.PurchaseUrl"
+                           target="_blank"
+                           rel="noopener noreferrer sponsored"
+                           class="book-card-link">
+                            <img src="/images/site/amazon-logo.png"
+                                 alt="Amazon"
+                                 class="amazon-logo" />
+                            <span>Buy on Amazon</span>
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+}
+   
+<p>
+    <a asp-controller="People" asp-action="Index">Back to people list</a>
+</p>
