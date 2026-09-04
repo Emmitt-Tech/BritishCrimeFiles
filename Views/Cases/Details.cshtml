@@ -341,142 +341,146 @@
 
             <!--People -->
             <div class="section-card">
-@{
-    var offenders = Model.CasePeople
-        .Where(cp => cp.Role == "Offender")
-        .ToList();
+                @{
+                    var offenders = Model.CasePeople
+                        .Where(cp => cp.Role == "Offender")
+                        .ToList();
 
-var victims = Model.CasePeople
-    .Where(cp => cp.Role == "Victim")
-    .OrderBy(cp => cp.SortOrder ?? int.MaxValue)
-    .ThenBy(cp => cp.Person!.LastName)
-    .ThenBy(cp => cp.Person!.FirstName)
-    .ToList();
-}
+                    var victims = Model.CasePeople
+                        .Where(cp => cp.Role == "Victim")
+                        .OrderBy(cp => cp.SortOrder ?? int.MaxValue)
+                        .ThenBy(cp => cp.Person!.LastName)
+                        .ThenBy(cp => cp.Person!.FirstName)
+                        .ToList();
+                }
 
-@if (offenders.Any())
-{
-<div class="people-group-heading">Offenders</div>
-    <div class="linked-people-grid">
-        @foreach (var casePerson in offenders)
-        {
-            var person = casePerson.Person!;
-            var displayName = $"{person.FirstName} {person.LastName}".Trim();
-
-            <a class="linked-person-card" asp-controller="People" asp-action="Details"
-               asp-route-id="@person.PersonId">
-
-<div class="linked-person-image-wrap">
-
-<div class="linked-person-image-wrap">
-
-    @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-    {
-        <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-    }
-    else
-    {
-        <div class="linked-person-photo no-photo-small">No photo</div>
-    }
-
-    <div class="linked-person-name-overlay">
-        @displayName
-    </div>
-
-</div>
-</div>
-
-
-            </a>
-        }
-    </div>
-}
-
-@if (victims.Any())
-{
-<div class="people-group-heading">Victims</div>
-
-<div class="victim-carousel">
-    <button type="button" class="victim-scroll-btn victim-scroll-left" aria-label="Scroll victims left">
-        ‹
-    </button>
-
-    <div class="linked-people-grid victim-scroll-row" id="victimScrollRow">
-        @foreach (var casePerson in victims)
-        {
-            var person = casePerson.Person!;
-            var displayName = $"{person.FirstName} {person.LastName}".Trim();
-
-            <a class="linked-person-card" asp-controller="People" asp-action="Details"
-               asp-route-id="@person.PersonId">
-
-                <div class="linked-person-image-wrap">
-                    @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                    {
-                        <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-                    }
-                    else
-                    {
-                        <div class="linked-person-photo no-photo-small">No photo</div>
-                    }
-
-                    <div class="linked-person-name-overlay">
-                        @displayName
-                    </div>
-                </div>
-            </a>
-        }
-    </div>
-
-    <button type="button" class="victim-scroll-btn victim-scroll-right" aria-label="Scroll victims right">
-        ›
-    </button>
-</div>
-}     
-       <!-- Books -->
-            @if (Model.Books != null && Model.Books.Any())
-            {
-                <hr class="section-divider" />
-
-                <section class="books-section">
-                    <div class="books-header">
-                        <h2>Books</h2>
-
-                        <div class="books-hint">
-                            <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo-inline" />
-                            <span>Order on Amazon</span>
-                        </div>
-                    </div>
-
-                    <div class="books-row">
-                        @foreach (var book in Model.Books)
+                @if (offenders.Any())
+                {
+                    <div class="people-group-heading">Offenders</div>
+                    <div class="linked-people-grid">
+                        @foreach (var casePerson in offenders)
                         {
-                            <div class="book-card">
-                                @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
-                                {
-                                    @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+                            var person = casePerson.Person!;
+                            var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+                            <a class="linked-person-card" asp-controller="People" asp-action="Details"
+                               asp-route-id="@person.PersonId">
+
+                                <div class="linked-person-image-wrap">
+
+                                    <div class="linked-person-image-wrap">
+
+                                        @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                                        {
+                                            <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+                                        }
+                                        else
+                                        {
+                                            <div class="linked-person-photo no-photo-small">No photo</div>
+                                        }
+
+                                        <div class="linked-person-name-overlay">
+                                            @displayName
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </a>
+                        }
+                    </div>
+                }
+
+                <div class="people-group-heading">Victims</div>
+
+                <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
+                   asp-route-role="Victim" class="btn btn-sm btn-outline-primary mb-3">
+                    Add victim
+                </a>
+
+                <div class="victim-carousel">
+                    <button type="button" class="victim-scroll-btn victim-scroll-left" aria-label="Scroll victims left">
+                        ‹
+                    </button>
+
+                    <div class="linked-people-grid victim-scroll-row" id="victimScrollRow">
+                        @foreach (var casePerson in victims)
+                        {
+                            var person = casePerson.Person!;
+                            var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+                            <a class="linked-person-card" asp-controller="People" asp-action="Details"
+                               asp-route-id="@person.PersonId">
+
+                                <div class="linked-person-image-wrap">
+                                    @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
                                     {
-                                        <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
-                                            <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
-                                        </a>
+                                        <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
                                     }
                                     else
                                     {
-                                        <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                        <div class="linked-person-photo no-photo-small">No photo</div>
                                     }
-                                }
 
-                                <div class="book-card-title">
-                                    @book.Title
+                                    <div class="linked-person-name-overlay">
+                                        @displayName
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         }
                     </div>
-                </section>
-            }
+
+                    <button type="button" class="victim-scroll-btn victim-scroll-right"
+                            aria-label="Scroll victims right">
+                        ›
+                    </button>
+                </div>
+                }
+                <!-- Books -->
+                @if (Model.Books != null && Model.Books.Any())
+                {
+                    <hr class="section-divider" />
+
+                    <section class="books-section">
+                        <div class="books-header">
+                            <h2>Books</h2>
+
+                            <div class="books-hint">
+                                <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo-inline" />
+                                <span>Order on Amazon</span>
+                            </div>
+                        </div>
+
+                        <div class="books-row">
+                            @foreach (var book in Model.Books)
+                            {
+                                <div class="book-card">
+                                    @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+                                    {
+                                        @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+                                        {
+                                            <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
+                                                <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                        }
+                                    }
+
+                                    <div class="book-card-title">
+                                        @book.Title
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 
