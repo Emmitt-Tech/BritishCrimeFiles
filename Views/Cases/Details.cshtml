@@ -341,8 +341,6 @@
 
             <!--People -->
             <div class="section-card">
-<h2>People</h2>
-
 @{
     var offenders = Model.CasePeople
         .Where(cp => cp.Role == "Offender")
@@ -358,8 +356,7 @@ var victims = Model.CasePeople
 
 @if (offenders.Any())
 {
-    <h3>Offenders</h3>
-
+<div class="people-group-heading">Offenders</div>
     <div class="linked-people-grid">
         @foreach (var casePerson in offenders)
         {
@@ -369,34 +366,27 @@ var victims = Model.CasePeople
             <a class="linked-person-card" asp-controller="People" asp-action="Details"
                asp-route-id="@person.PersonId">
 
-                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                {
-                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-                }
-                else
-                {
-                    <div class="linked-person-photo no-photo-small">No photo</div>
-                }
+<div class="linked-person-image-wrap">
 
-                <div class="linked-person-name">@displayName</div>
+<div class="linked-person-image-wrap">
 
-                @if (person.YearStarted != null || person.YearCaught != null)
-                {
-                    <div class="linked-person-meta">
-                        @if (person.YearStarted != null)
-                        {
-                            <span>@person.YearStarted</span>
-                        }
-                        @if (person.YearStarted != null && person.YearCaught != null)
-                        {
-                            <span> - </span>
-                        }
-                        @if (person.YearCaught != null)
-                        {
-                            <span>@person.YearCaught</span>
-                        }
-                    </div>
-                }
+    @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+    {
+        <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+    }
+    else
+    {
+        <div class="linked-person-photo no-photo-small">No photo</div>
+    }
+
+    <div class="linked-person-name-overlay">
+        @displayName
+    </div>
+
+</div>
+</div>
+
+
             </a>
         }
     </div>
@@ -404,9 +394,14 @@ var victims = Model.CasePeople
 
 @if (victims.Any())
 {
-    <h3>Victims</h3>
+<div class="people-group-heading">Victims</div>
 
-    <div class="linked-people-grid">
+<div class="victim-carousel">
+    <button type="button" class="victim-scroll-btn victim-scroll-left" aria-label="Scroll victims left">
+        ‹
+    </button>
+
+    <div class="linked-people-grid victim-scroll-row" id="victimScrollRow">
         @foreach (var casePerson in victims)
         {
             var person = casePerson.Person!;
@@ -415,20 +410,30 @@ var victims = Model.CasePeople
             <a class="linked-person-card" asp-controller="People" asp-action="Details"
                asp-route-id="@person.PersonId">
 
-                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                {
-                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-                }
-                else
-                {
-                    <div class="linked-person-photo no-photo-small">No photo</div>
-                }
+                <div class="linked-person-image-wrap">
+                    @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                    {
+                        <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+                    }
+                    else
+                    {
+                        <div class="linked-person-photo no-photo-small">No photo</div>
+                    }
 
-                <div class="linked-person-name">@displayName</div>
+                    <div class="linked-person-name-overlay">
+                        @displayName
+                    </div>
+                </div>
             </a>
         }
     </div>
-}            <!-- Books -->
+
+    <button type="button" class="victim-scroll-btn victim-scroll-right" aria-label="Scroll victims right">
+        ›
+    </button>
+</div>
+}     
+       <!-- Books -->
             @if (Model.Books != null && Model.Books.Any())
             {
                 <hr class="section-divider" />
@@ -478,3 +483,25 @@ var victims = Model.CasePeople
 <p>
     <a asp-controller="Home" asp-action="Index">Back to home</a>
 </p>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const row = document.getElementById("victimScrollRow");
+        const leftButton = document.querySelector(".victim-scroll-left");
+        const rightButton = document.querySelector(".victim-scroll-right");
+
+        leftButton?.addEventListener("click", function () {
+            row?.scrollBy({
+                left: -240,
+                behavior: "smooth"
+            });
+        });
+
+        rightButton?.addEventListener("click", function () {
+            row?.scrollBy({
+                left: 240,
+                behavior: "smooth"
+            });
+        });
+    });
+</script>
