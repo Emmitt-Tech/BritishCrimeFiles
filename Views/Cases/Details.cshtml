@@ -394,11 +394,13 @@
 
                 <div class="people-group-heading">Victims</div>
 
-                <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
-                   asp-route-role="Victim" class="btn btn-sm btn-outline-primary mb-3">
-                    Add victim
-                </a>
-
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
+                       asp-route-role="Victim" class="case-add-link">
+                        Add victim
+                    </a>
+                }
                 <div class="victim-carousel">
                     <button type="button" class="victim-scroll-btn victim-scroll-left" aria-label="Scroll victims left">
                         ‹

@@ -2,8 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace UKCrimeWeb.Models
 {
-    public class CrimeDbContext : DbContext
-    {
+public class CrimeDbContext : DbContext    {
         public CrimeDbContext(DbContextOptions<CrimeDbContext> options)
             : base(options)
         {
@@ -43,8 +42,8 @@ namespace UKCrimeWeb.Models
                 .HasOne(pp => pp.Programme)
                 .WithMany()
                 .HasForeignKey(pp => pp.ProgrammeId);
-            
-            
+
+
             modelBuilder.Entity<Case>().HasKey(c => c.CaseId);
             modelBuilder.Entity<CasePerson>().HasKey(cp => new { cp.CaseId, cp.PersonId });
 
@@ -57,7 +56,7 @@ namespace UKCrimeWeb.Models
                 .HasOne(cp => cp.Person)
                 .WithMany()
                 .HasForeignKey(cp => cp.PersonId);
-            
+
             modelBuilder.Entity<PersonBook>()
                 .HasOne(pb => pb.Person)
                 .WithMany(p => p.PersonBooks)

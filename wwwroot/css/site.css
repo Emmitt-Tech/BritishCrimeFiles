@@ -828,6 +828,29 @@ body {
     flex: 0 0 auto;
 }
 
+.header-login {
+    display: flex;
+    align-items: center;
+}
+
+.header-login .navbar-nav {
+    margin: 0;
+}
+
+.header-login .nav-link {
+    color: white;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.header-login .nav-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
 .case-card-image {
     width: 100%;
     height: 220px;

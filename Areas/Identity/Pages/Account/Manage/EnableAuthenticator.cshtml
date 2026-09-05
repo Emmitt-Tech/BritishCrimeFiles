@@ -1,0 +1,36 @@
+@page
+@model UKCrimeWeb.Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel
+
+<h1>Enable authenticator</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.QrCodeImage))
+{
+    <p>Scan this QR code with your authenticator app:</p>
+
+    <img src="@Model.QrCodeImage" alt="Authenticator QR code" style="width: 220px; height: 220px;" />
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.SharedKey))
+{
+    <p class="mt-3">
+        Or enter this key manually:
+        <strong>@Model.SharedKey</strong>
+    </p>
+}
+
+<form method="post" class="mt-4">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Input.Code" class="form-label"></label>
+        <input asp-for="Input.Code" class="form-control" autocomplete="one-time-code" inputmode="numeric" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Verify
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
