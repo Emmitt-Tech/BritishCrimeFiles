@@ -800,18 +800,25 @@ body {
 ========================= */
 
 .site-header {
-    background: #111;
+    background-image: url('/images/site/banner-wide.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 170px;
     padding: 10px 0;
 }
 
 .site-header-inner {
-    max-width: 1400px;
+    max-width: 1550px;
+    min-height: 170px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 18px 24px 0 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 20px;
+    transform: translateY(12px);
 }
 
 .site-banner {
@@ -891,7 +898,8 @@ body {
 .site-banner {
     display: block;
     width: 100%;
-    height: auto;
+    max-height: 170px;
+    object-fit: cover;
 }
 
 .case-overview,
