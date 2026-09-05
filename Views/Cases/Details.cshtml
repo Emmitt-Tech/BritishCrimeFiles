@@ -357,6 +357,13 @@
                 @if (offenders.Any())
                 {
                     <div class="people-group-heading">Offenders</div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
+                           asp-route-role="Offender" class="case-add-link">
+                            Add offender
+                        </a>
+                    }
                     <div class="linked-people-grid">
                         @foreach (var casePerson in offenders)
                         {

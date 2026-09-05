@@ -804,9 +804,18 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
+    position: relative;
     min-height: 170px;
     padding: 10px 0;
+}
+
+.site-header-home-link {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 65%;
+    height: 100%;
+    z-index: 1;
 }
 
 .site-header-inner {
@@ -819,6 +828,14 @@ body {
     justify-content: flex-end;
     gap: 20px;
     transform: translateY(12px);
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.header-search,
+.header-login {
+    pointer-events: auto;
 }
 
 .site-banner {

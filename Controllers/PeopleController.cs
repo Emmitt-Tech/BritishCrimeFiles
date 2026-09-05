@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UKCrimeWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UKCrimeWeb.Controllers
 {
@@ -13,17 +15,32 @@ namespace UKCrimeWeb.Controllers
             _context = context;
         }
 
-        public IActionResult Create(int? caseId, string? role)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(int? caseId, string? role)
         {
+            var cases = await _context.Case
+                .OrderBy(c => c.Title)
+                .ToListAsync();
+
             var model = new CreatePersonViewModel
             {
                 CaseId = caseId,
-                Role = role
+                CaseTitle = cases
+                    .FirstOrDefault(c => c.CaseId == caseId)
+                    ?.Title,
+                Role = role,
+                Cases = cases
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CaseId.ToString(),
+                        Text = c.Title
+                    })
+                    .ToList()
             };
-
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePersonViewModel model)

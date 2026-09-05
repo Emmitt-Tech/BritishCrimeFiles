@@ -4,12 +4,44 @@
     ViewData["Title"] = "Create Person";
 }
 
-<h1>Create Person</h1>
+<h1>
+    @if (Model.Role == "Victim")
+    {
+        <text>Add Victim</text>
+    }
+    else if (Model.Role == "Offender")
+    {
+        <text>Add Offender</text>
+    }
+    else
+    {
+        <text>Create Person</text>
+    }
 
+    @if (!string.IsNullOrWhiteSpace(Model.CaseTitle))
+    {
+        <text> — @Model.CaseTitle</text>
+    }
+</h1>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 
-    <input asp-for="CaseId" type="hidden" />
-    <input asp-for="Role" type="hidden" />
+    <div class="mb-3">
+        <label asp-for="CaseId" class="form-label">Case</label>
+
+        <select asp-for="CaseId" asp-items="Model.Cases" class="form-select">
+            <option value="">Select a case...</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label">Role</label>
+
+        <select asp-for="Role" class="form-select">
+            <option value="">Select a role...</option>
+            <option value="Victim">Victim</option>
+            <option value="Offender">Offender</option>
+        </select>
+    </div>
 
     <div class="mb-3">
         <label asp-for="FirstName" class="form-label"></label>

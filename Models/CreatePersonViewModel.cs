@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UKCrimeWeb.Models
 {
@@ -13,9 +14,9 @@ namespace UKCrimeWeb.Models
         public IFormFile? Photo { get; set; }
 
         public int? CaseId { get; set; }
-
+        public string? CaseTitle { get; set; }
+        public List<SelectListItem> Cases { get; set; } = new();
         public string? Role { get; set; }
-
         public int? SortOrder { get; set; }
     }
 }
