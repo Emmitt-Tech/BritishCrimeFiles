@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UKCrimeWeb.Models;
@@ -52,6 +53,28 @@ namespace UKCrimeWeb.Controllers
             };
 
             return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(Case crimeCase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(crimeCase);
+            }
+
+            _context.Case.Add(crimeCase);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = crimeCase.CaseId });
         }
         public async Task<IActionResult> Details(int id)
         {
