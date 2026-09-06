@@ -71,6 +71,7 @@ namespace UKCrimeWeb.Controllers
             person.FirstName = model.FirstName;
             person.LastName = model.LastName;
             person.Nickname = model.Nickname;
+            person.Biography = model.Biography;
 
             if (model.Photo != null && model.Photo.Length > 0)
             {
@@ -175,6 +176,7 @@ namespace UKCrimeWeb.Controllers
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 Nickname = person.Nickname,
+                Biography = person.Biography,
                 ExistingPhotoPath = person.PhotoPath
             };
 

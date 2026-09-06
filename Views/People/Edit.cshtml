@@ -26,6 +26,11 @@
         <input asp-for="Nickname" class="form-control" />
     </div>
 
+    <div class="mb-3">
+        <label asp-for="Biography" class="form-label"></label>
+        <textarea asp-for="Biography" class="form-control" rows="10"></textarea>
+    </div>
+
     @if (!string.IsNullOrWhiteSpace(Model.ExistingPhotoPath))
     {
         <div class="mb-3">
