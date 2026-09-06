@@ -102,19 +102,104 @@
     .case-timeline-item:hover .case-timeline-popup {
         display: block;
     }
+
+    .case-timeline-horizontal {
+        display: flex;
+        gap: 2rem;
+        overflow-x: auto;
+        padding: 1rem 0 1.5rem 0;
+        position: relative;
+        scrollbar-width: none;
+    }
+
+    .case-timeline-horizontal::-webkit-scrollbar {
+        display: none;
+    }
+
+    .case-timeline-horizontal-item::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 7px;
+        width: calc(100% + 2rem);
+        height: 3px;
+        background: #bdbdbd;
+        z-index: 0;
+    }
+
+    .case-timeline-horizontal-item:last-child::before {
+        display: none;
+    }
+
+    .case-timeline-horizontal-item {
+        flex: 0 0 240px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .case-timeline-horizontal-dot {
+        position: relative;
+        z-index: 2;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border: 3px solid #222;
+        border-radius: 50%;
+        box-sizing: border-box;
+        margin-bottom: 0.75rem;
+    }
+
+    .case-timeline-carousel {
+        position: relative;
+    }
+
+    .case-timeline-horizontal {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .timeline-scroll-btn {
+        position: absolute;
+        top: 23px;
+        transform: translateY(-50%);
+        z-index: 5;
+
+        border: none;
+        background: white;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        color: #666;
+    }
+
+    .timeline-scroll-left {
+        left: -38px;
+    }
+
+    .timeline-scroll-right {
+        right: -38px;
+    }
+
+    .timeline-scroll-btn:hover {
+        color: #111;
+    }
 </style>
 
 <style>
     .case-details-columns {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2rem;
-        align-items: start;
+        display: block;
     }
 
     .case-left-column {
-        position: sticky;
-        top: 1.5rem;
+        position: static;
     }
 
     .case-right-column {
@@ -167,26 +252,76 @@
     </div>
 </div>
 
+<div class="case-facts-grid">
+    @if (!string.IsNullOrWhiteSpace(Model.Case?.Location))
+    {
+        <div class="fact-item">
+            <div class="fact-label">Location</div>
+            <div class="fact-value">@Model.Case.Location</div>
+        </div>
+    }
+
+    @if (Model.Case?.VictimCount != null)
+    {
+        <div class="fact-item">
+            <div class="fact-label">Victims</div>
+            <div class="fact-value">@Model.Case.VictimCount</div>
+        </div>
+    }
+
+    @if (Model.Case?.YearStarted != null || Model.Case?.YearEnded != null)
+    {
+        <div class="fact-item">
+            <div class="fact-label">Years active</div>
+            <div class="fact-value">
+                @if (Model.Case?.YearStarted != null && Model.Case?.YearEnded != null)
+                {
+                    @($"{Model.Case.YearStarted} - {Model.Case.YearEnded}")
+                }
+                else if (Model.Case?.YearStarted != null)
+                {
+                    @($"{Model.Case.YearStarted} -")
+                }
+                else
+                {
+                    @($"- {Model.Case?.YearEnded}")
+                }
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Case.Sentence))
+    {
+        <div class="fact-item">
+            <div class="fact-label">Sentence</div>
+            <div class="fact-value">@Model.Case.Sentence</div>
+        </div>
+    }
+
+</div>
+
 <!-- Key facts section -->
 <div class="person-page">
     <div class="case-details-columns">
 
-        <div class="case-left-column">
+  
+        <!-- Timeline section -->
+        <section style="margin-top: 3rem;">
+            <h2 style="margin-bottom: 1.5rem;">Timeline</h2>
 
-            <!-- Timeline section -->
-            <section style="margin-top: 3rem;">
-                <h2 style="margin-bottom: 1.5rem;">Timeline</h2>
+            <div class="case-timeline-carousel">
 
-                <div style="position: relative; max-width: 100%; padding-left: 63px;">
-                    <div style="position: absolute; left: 14px; top: 0; bottom: 0; width: 3px; background: #bdbdbd;">
-                    </div>
+                <button type="button" class="timeline-scroll-btn timeline-scroll-left"
+                        aria-label="Scroll timeline left">
+                    ‹
+                </button>
+
+                <div class="case-timeline-horizontal">
 
                     @foreach (var item in Model.TimelineEvents)
                     {
-                        <div class="timeline-row" style="position: relative; margin-bottom: 1.5rem;">
-                            <div
-                                style="position: absolute; left: -55px; top: 6px; width: 14px; height: 14px; background: #fff; border: 3px solid #222; border-radius: 50%; box-sizing: border-box; z-index: 2;">
-                            </div>
+                        <div class="timeline-row case-timeline-horizontal-item">
+                            <div class="case-timeline-horizontal-dot"></div>
                             <div style="display: grid; grid-template-columns: 82px 1fr; gap: 0.5rem; align-items: start;">
                                 <div style="font-weight: 600; color: #666; line-height: 1.4; white-space: nowrap;">
                                     @(string.IsNullOrWhiteSpace(item.DisplayDate)
@@ -212,8 +347,15 @@
                         </div>
                     }
                 </div>
-            </section>
-        </div>
+                <button type="button" class="timeline-scroll-btn timeline-scroll-right"
+                        aria-label="Scroll timeline right">
+                    ›
+                </button>
+
+            </div>
+
+        </section>
+
         <div class="case-right-column">
             @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
             {
@@ -221,53 +363,7 @@
                     <div class="case-key-facts-layout">
                         <div class="case-key-facts">
 
-                            <div class="case-facts-grid">
-                                @if (!string.IsNullOrWhiteSpace(Model.Case?.Location))
-                                {
-                                    <div class="fact-item">
-                                        <div class="fact-label">Location</div>
-                                        <div class="fact-value">@Model.Case.Location</div>
-                                    </div>
-                                }
-
-                                @if (Model.Case?.VictimCount != null)
-                                {
-                                    <div class="fact-item">
-                                        <div class="fact-label">Victims</div>
-                                        <div class="fact-value">@Model.Case.VictimCount</div>
-                                    </div>
-                                }
-
-                                @if (Model.Case?.YearStarted != null || Model.Case?.YearEnded != null)
-                                {
-                                    <div class="fact-item">
-                                        <div class="fact-label">Years active</div>
-                                        <div class="fact-value">
-                                            @if (Model.Case?.YearStarted != null && Model.Case?.YearEnded != null)
-                                            {
-                                                @($"{Model.Case.YearStarted} - {Model.Case.YearEnded}")
-                                            }
-                                            else if (Model.Case?.YearStarted != null)
-                                            {
-                                                @($"{Model.Case.YearStarted} -")
-                                            }
-                                            else
-                                            {
-                                                @($"- {Model.Case?.YearEnded}")
-                                            }
-                                        </div>
-                                    </div>
-                                }
-
-                                @if (!string.IsNullOrWhiteSpace(Model.Case.Sentence))
-                                {
-                                    <div class="fact-item">
-                                        <div class="fact-label">Sentence</div>
-                                        <div class="fact-value">@Model.Case.Sentence</div>
-                                    </div>
-                                }
-
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -474,6 +570,24 @@
                 left: 240,
                 behavior: "smooth"
             });
+        });
+    });
+
+    const timeline = document.querySelector(".case-timeline-horizontal");
+    const timelineLeft = document.querySelector(".timeline-scroll-left");
+    const timelineRight = document.querySelector(".timeline-scroll-right");
+
+    timelineLeft?.addEventListener("click", function () {
+        timeline?.scrollBy({
+            left: -300,
+            behavior: "smooth"
+        });
+    });
+
+    timelineRight?.addEventListener("click", function () {
+        timeline?.scrollBy({
+            left: 300,
+            behavior: "smooth"
         });
     });
 </script>
