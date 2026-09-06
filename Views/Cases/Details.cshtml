@@ -376,119 +376,106 @@
 
         </section>
 
-        <div class="case-right-column">
-            @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
-            {
-                <div class="section-card">
-                    <div class="case-key-facts-layout">
-                        <div class="case-key-facts">
+        <!-- People -->
+        <div class="section-card">
 
-                            
-                        </div>
-                    </div>
+            @{
+                var offenders = Model.CasePeople
+                    .Where(cp => cp.Role == "Offender")
+                    .ToList();
 
-                    <h2>Overview</h2>
-
-                    <!-- Overview  - short -->
-                    @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
-                    {
-                        <div class="case-overview">
-                            @Model.Case.Summary
-                        </div>
-                    }
-
-                    <!-- Overview - long -->
-                    @if (!string.IsNullOrWhiteSpace(Model.Case?.SummaryFull))
-                    {
-                        <details class="case-overview-full">
-                            <summary class="overview-toggle">
-                                <span class="overview-toggle-text">Continue reading</span>
-                            </summary>
-
-                            <div class="case-overview-expanded">
-                                @Model.Case.SummaryFull
-                            </div>
-                        </details>
-                    }
-                </div>
+                var victims = Model.CasePeople
+                    .Where(cp => cp.Role == "Victim")
+                    .OrderBy(cp => cp.SortOrder ?? int.MaxValue)
+                    .ThenBy(cp => cp.Person!.LastName)
+                    .ThenBy(cp => cp.Person!.FirstName)
+                    .ToList();
             }
 
-
-            <!--People -->
-            <div class="section-card">
-                @{
-                    var offenders = Model.CasePeople
-                        .Where(cp => cp.Role == "Offender")
-                        .ToList();
-
-                    var victims = Model.CasePeople
-                        .Where(cp => cp.Role == "Victim")
-                        .OrderBy(cp => cp.SortOrder ?? int.MaxValue)
-                        .ThenBy(cp => cp.Person!.LastName)
-                        .ThenBy(cp => cp.Person!.FirstName)
-                        .ToList();
-                }
-
-                @if (offenders.Any())
-                {
-                    <div class="people-group-heading">Offenders</div>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
-                           asp-route-role="Offender" class="case-add-link">
-                            Add offender
-                        </a>
-                    }
-                    <div class="linked-people-grid">
-                        @foreach (var casePerson in offenders)
-                        {
-                            var person = casePerson.Person!;
-                            var displayName = $"{person.FirstName} {person.LastName}".Trim();
-
-                            <a class="linked-person-card" asp-controller="People" asp-action="Details"
-                               asp-route-id="@person.PersonId">
-
-                                <div class="linked-person-image-wrap">
-
-                                    <div class="linked-person-image-wrap">
-
-                                        @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                                        {
-                                            <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
-                                        }
-                                        else
-                                        {
-                                            <div class="linked-person-photo no-photo-small">No photo</div>
-                                        }
-
-                                        <div class="linked-person-name-overlay">
-                                            @displayName
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                            </a>
-                        }
-                    </div>
-                }
-
-                <div class="people-group-heading">Victims</div>
+            @if (offenders.Any())
+            {
+                <div class="people-group-heading">Offenders</div>
 
                 @if (User.IsInRole("Admin"))
                 {
                     <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
-                       asp-route-role="Victim" class="case-add-link">
-                        Add victim
+                       asp-route-role="Offender" class="case-add-link">
+                        Add offender
                     </a>
                 }
+
+                <div class="linked-people-grid">
+                    @foreach (var casePerson in offenders)
+                    {
+                        var person = casePerson.Person!;
+                        var displayName = $"{person.FirstName} {person.LastName}".Trim();
+
+                        <a class="linked-person-card" asp-controller="People" asp-action="Details"
+                           asp-route-id="@person.PersonId">
+
+                            <div class="linked-person-image-wrap">
+                                @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
+                                {
+                                    <img src="@person.PhotoPath" alt="@displayName" class="linked-person-photo" />
+                                }
+                                else
+                                {
+                                    <div class="linked-person-photo no-photo-small">
+                                        No photo
+                                    </div>
+                                }
+
+                                <div class="linked-person-name-overlay">
+                                    @displayName
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+
+            <h2>Overview</h2>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Case?.Summary))
+            {
+                <div class="case-overview">
+                    @Model.Case.Summary
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Case?.SummaryFull))
+            {
+                <details class="case-overview-full">
+                    <summary class="overview-toggle">
+                        <span class="overview-toggle-text">Continue reading</span>
+                    </summary>
+
+                    <div class="case-overview-expanded">
+                        @Model.Case.SummaryFull
+                    </div>
+                </details>
+            }
+
+            <div class="people-group-heading">Victims</div>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
+                   asp-route-role="Victim" class="case-add-link">
+                    Add victim
+                </a>
+            }
+
+            @if (victims.Any())
+            {
                 <div class="victim-carousel">
+
                     <button type="button" class="victim-scroll-btn victim-scroll-left" aria-label="Scroll victims left">
                         ‹
                     </button>
 
                     <div class="linked-people-grid victim-scroll-row" id="victimScrollRow">
+
                         @foreach (var casePerson in victims)
                         {
                             var person = casePerson.Person!;
@@ -504,7 +491,9 @@
                                     }
                                     else
                                     {
-                                        <div class="linked-person-photo no-photo-small">No photo</div>
+                                        <div class="linked-person-photo no-photo-small">
+                                            No photo
+                                        </div>
                                     }
 
                                     <div class="linked-person-name-overlay">
@@ -513,101 +502,104 @@
                                 </div>
                             </a>
                         }
+
                     </div>
 
-                    <button type="button" class="victim-scroll-btn victim-scroll-right"
-                            aria-label="Scroll victims right">
+                    <button type="button" class="victim-scroll-btn victim-scroll-right" aria-label="Scroll victims right">
                         ›
                     </button>
+
                 </div>
+            }
 
-                <!-- Books -->
-                @if (Model.Books != null && Model.Books.Any())
-                {
-                    <hr class="section-divider" />
+            @if (Model.Books != null && Model.Books.Any())
+            {
+                <hr class="section-divider" />
 
-                    <section class="books-section">
-                        <div class="books-header">
-                            <h2>Books</h2>
+                <section class="books-section">
 
-                            <div class="books-hint">
-                                <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo-inline" />
-                                <span>Order on Amazon</span>
-                            </div>
+                    <div class="books-header">
+                        <h2>Books</h2>
+
+                        <div class="books-hint">
+                            <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo-inline" />
+                            <span>Order on Amazon</span>
                         </div>
+                    </div>
 
-                        <div class="books-row">
-                            @foreach (var book in Model.Books)
-                            {
-                                <div class="book-card">
-                                    @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+                    <div class="books-row">
+                        @foreach (var book in Model.Books)
+                        {
+                            <div class="book-card">
+
+                                @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+                                {
+                                    @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
                                     {
-                                        @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
-                                        {
-                                            <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
-                                                <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
-                                            </a>
-                                        }
-                                        else
-                                        {
+                                        <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
+
                                             <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
-                                        }
+                                        </a>
                                     }
+                                    else
+                                    {
+                                        <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                                    }
+                                }
 
-                                    <div class="book-card-title">
-                                        @book.Title
-                                    </div>
+                                <div class="book-card-title">
+                                    @book.Title
                                 </div>
-                            }
-                        </div>
-                    </section>
-                }
-            </div>
+
+                            </div>
+                        }
+                    </div>
+
+                </section>
+            }
+
         </div>
-    </div>
-</div>
 
+        <p>
+            <a asp-controller="Home" asp-action="Index">Back to home</a>
+        </p>
 
-<p>
-    <a asp-controller="Home" asp-action="Index">Back to home</a>
-</p>
+        <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const row = document.getElementById("victimScrollRow");
+                        const leftButton = document.querySelector(".victim-scroll-left");
+                        const rightButton = document.querySelector(".victim-scroll-right");
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const row = document.getElementById("victimScrollRow");
-        const leftButton = document.querySelector(".victim-scroll-left");
-        const rightButton = document.querySelector(".victim-scroll-right");
+                        leftButton?.addEventListener("click", function () {
+                            row?.scrollBy({
+                                left: -240,
+                                behavior: "smooth"
+                            });
+                        });
 
-        leftButton?.addEventListener("click", function () {
-            row?.scrollBy({
-                left: -240,
-                behavior: "smooth"
-            });
-        });
+                        rightButton?.addEventListener("click", function () {
+                            row?.scrollBy({
+                                left: 240,
+                                behavior: "smooth"
+                            });
+                        });
+                    });
 
-        rightButton?.addEventListener("click", function () {
-            row?.scrollBy({
-                left: 240,
-                behavior: "smooth"
-            });
-        });
-    });
+                    const timeline = document.querySelector(".case-timeline-horizontal");
+                    const timelineLeft = document.querySelector(".timeline-scroll-left");
+                    const timelineRight = document.querySelector(".timeline-scroll-right");
 
-    const timeline = document.querySelector(".case-timeline-horizontal");
-    const timelineLeft = document.querySelector(".timeline-scroll-left");
-    const timelineRight = document.querySelector(".timeline-scroll-right");
+                    timelineLeft?.addEventListener("click", function () {
+                        timeline?.scrollBy({
+                            left: -300,
+                            behavior: "smooth"
+                        });
+                    });
 
-    timelineLeft?.addEventListener("click", function () {
-        timeline?.scrollBy({
-            left: -300,
-            behavior: "smooth"
-        });
-    });
-
-    timelineRight?.addEventListener("click", function () {
-        timeline?.scrollBy({
-            left: 300,
-            behavior: "smooth"
-        });
-    });
-</script>
+                    timelineRight?.addEventListener("click", function () {
+                        timeline?.scrollBy({
+                            left: 300,
+                            behavior: "smooth"
+                        });
+                    });
+        </script>
