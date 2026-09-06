@@ -9,9 +9,7 @@
 
     @if (User.IsInRole("Admin"))
     {
-        <a asp-controller="People"
-           asp-action="Create"
-           class="btn btn-primary">
+        <a asp-controller="People" asp-action="Create" class="btn btn-primary">
             Create person
         </a>
     }
@@ -26,17 +24,12 @@ else
     <div class="linked-people-grid">
         @foreach (var p in Model)
         {
-            <a asp-controller="People"
-               asp-action="Details"
-               asp-route-id="@p.PersonId"
-               class="linked-person-card">
+            <a asp-controller="People" asp-action="Details" asp-route-id="@p.PersonId" class="linked-person-card">
 
                 <div class="linked-person-image-wrap">
                     @if (!string.IsNullOrWhiteSpace(p.PhotoPath))
                     {
-                        <img src="@p.PhotoPath"
-                             alt="@p.FirstName @p.LastName"
-                             class="linked-person-photo" />
+                        <img src="@p.PhotoPath" alt="@p.FirstName @p.LastName" class="linked-person-photo" />
                     }
                     else
                     {

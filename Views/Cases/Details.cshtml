@@ -164,13 +164,6 @@
             }
         </p>
 
-        <div class="case-stats">
-            @if (Model.Case?.VictimCount != null)
-            {
-                <span>👥 @Model.Case.VictimCount victims</span>
-            }
-            <span>✔ Solved</span>
-        </div>
     </div>
 </div>
 
@@ -226,39 +219,6 @@
             {
                 <div class="section-card">
                     <div class="case-key-facts-layout">
-
-                        <div class="case-lead-people">
-                            @{
-                                var leadPeople = Model.CasePeople
-                                    .Where(cp => cp.Role == "Offender")
-                                    .Take(2)
-                                    .ToList();
-                            }
-                            @if (leadPeople.Any())
-                            {
-                                <div class="case-lead-people-list">
-                                    @foreach (var casePerson in leadPeople)
-                                    {
-                                        var person = casePerson.Person!;
-                                        var displayName = $"{person.FirstName} {person.LastName}".Trim();
-                                        <a class="case-lead-person" asp-controller="People" asp-action="Details"
-                                           asp-route-id="@person.PersonId">
-                                            @if (!string.IsNullOrWhiteSpace(person.PhotoPath))
-                                            {
-                                                <img src="@person.PhotoPath" alt="@displayName" class="case-lead-person-photo" />
-                                            }
-                                            else
-                                            {
-                                                <div class="case-lead-person-photo case-lead-person-no-photo">No photo</div>
-                                            }
-
-                                            
-                                        </a>
-                                    }
-                                </div>
-                            }
-                        </div>
-
                         <div class="case-key-facts">
                             <h2>Key Facts</h2>
 
@@ -445,7 +405,7 @@
                         ›
                     </button>
                 </div>
-                }
+
                 <!-- Books -->
                 @if (Model.Books != null && Model.Books.Any())
                 {
