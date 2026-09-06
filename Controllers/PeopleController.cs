@@ -40,6 +40,54 @@ namespace UKCrimeWeb.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(EditPersonViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var person = await _context.Person
+                .FirstOrDefaultAsync(p => p.PersonId == model.PersonId);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            person.FirstName = model.FirstName;
+            person.LastName = model.LastName;
+            person.Nickname = model.Nickname;
+
+            if (model.Photo != null && model.Photo.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "images",
+                    "people");
+
+                Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.Photo.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Photo.CopyToAsync(stream);
+                }
+
+                person.PhotoPath = $"/images/people/{fileName}";
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = person.PersonId });
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -98,6 +146,29 @@ namespace UKCrimeWeb.Controllers
             }
 
             return RedirectToAction(nameof(Details), new { id = person.PersonId });
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var person = await _context.Person
+                .FirstOrDefaultAsync(p => p.PersonId == id);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditPersonViewModel
+            {
+                PersonId = person.PersonId,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Nickname = person.Nickname,
+                ExistingPhotoPath = person.PhotoPath
+            };
+
+            return View(model);
         }
         public async Task<IActionResult> Details(int id)
         {

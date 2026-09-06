@@ -2,22 +2,29 @@
 
 @{
     var displayName = $"{Model.Person?.FirstName} {Model.Person?.LastName}".Trim();
-    ViewData["Title"] = displayName;    
+    ViewData["Title"] = displayName;
+}
+
+@if (User.IsInRole("Admin"))
+{
+    <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.Person.PersonId" class="btn btn-primary mb-3">
+        Edit person
+    </a>
 }
 
 
 <div class="person-page">
     <div class="person-header">
         <div class="person-photo">
-    @if (!string.IsNullOrWhiteSpace(Model.Person?.PhotoPath))
-    {
-        <img src="@Model.Person.PhotoPath" alt="@displayName" />
-    }
-    else
-    {
-        <div class="no-photo">No photo available</div>
-    }
-</div>
+            @if (!string.IsNullOrWhiteSpace(Model.Person?.PhotoPath))
+            {
+                <img src="@Model.Person.PhotoPath" alt="@displayName" />
+            }
+            else
+            {
+                <div class="no-photo">No photo available</div>
+            }
+        </div>
 
         <div class="person-facts">
             <h1>@displayName</h1>
@@ -73,12 +80,10 @@
                 @foreach (var programme in Model.Programmes)
                 {
                     <li class="programme-item">
-                        <a class="programme-link"
-   asp-controller="Programme"
-   asp-action="Details"
-   asp-route-id="@programme.ProgrammeId">
-    @programme.Title
-</a>
+                        <a class="programme-link" asp-controller="Programme" asp-action="Details"
+                           asp-route-id="@programme.ProgrammeId">
+                            @programme.Title
+                        </a>
 
                         @if (programme.BroadcastYear.HasValue)
                         {
@@ -94,7 +99,7 @@
         }
     </div>
 </div>
-    @if (Model.Books != null && Model.Books.Any())
+@if (Model.Books != null && Model.Books.Any())
 {
     <section class="books-section">
         <h2>Books</h2>
@@ -104,24 +109,18 @@
             {
                 <div class="book-card">
                     @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
-{
-    if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
-    {
-        <a href="@book.PurchaseUrl"
-           target="_blank"
-           rel="noopener noreferrer sponsored">
-            <img src="@book.ImageUrl"
-                 alt="@book.Title"
-                 class="book-card-image" />
-        </a>
-    }
-    else
-    {
-        <img src="@book.ImageUrl"
-             alt="@book.Title"
-             class="book-card-image" />
-    }
-}
+                    {
+                        if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
+                        {
+                            <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored">
+                                <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                            </a>
+                        }
+                        else
+                        {
+                            <img src="@book.ImageUrl" alt="@book.Title" class="book-card-image" />
+                        }
+                    }
 
                     <div class="book-card-title">
                         @book.Title
@@ -129,13 +128,8 @@
 
                     @if (!string.IsNullOrWhiteSpace(book.PurchaseUrl))
                     {
-                        <a href="@book.PurchaseUrl"
-                           target="_blank"
-                           rel="noopener noreferrer sponsored"
-                           class="book-card-link">
-                            <img src="/images/site/amazon-logo.png"
-                                 alt="Amazon"
-                                 class="amazon-logo" />
+                        <a href="@book.PurchaseUrl" target="_blank" rel="noopener noreferrer sponsored" class="book-card-link">
+                            <img src="/images/site/amazon-logo.png" alt="Amazon" class="amazon-logo" />
                             <span>Buy on Amazon</span>
                         </a>
                     }
@@ -144,7 +138,7 @@
         </div>
     </section>
 }
-   
+
 <p>
     <a asp-controller="People" asp-action="Index">Back to people list</a>
 </p>
