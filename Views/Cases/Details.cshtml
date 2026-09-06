@@ -120,7 +120,7 @@
         content: "";
         position: absolute;
         left: 7px;
-        top: 7px;
+        top: 36px;
         width: calc(100% + 2rem);
         height: 3px;
         background: #bdbdbd;
@@ -160,7 +160,7 @@
 
     .timeline-scroll-btn {
         position: absolute;
-        top: 23px;
+        top: 47px;
         transform: translateY(-50%);
         z-index: 5;
 
@@ -190,6 +190,28 @@
 
     .timeline-scroll-btn:hover {
         color: #111;
+    }
+
+    .timeline-event-content {
+        text-align: center;
+    }
+
+    .timeline-event-date {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 0.5rem;
+        white-space: nowrap;
+    }
+
+    .timeline-event-title {
+        margin-top: 0.6rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .case-timeline-horizontal-dot {
+        margin: 0 auto;
     }
 </style>
 
@@ -307,8 +329,7 @@
   
         <!-- Timeline section -->
         <section style="margin-top: 3rem;">
-            <h2 style="margin-bottom: 1.5rem;">Timeline</h2>
-
+            <div class="people-group-heading">Timeline</div>
             <div class="case-timeline-carousel">
 
                 <button type="button" class="timeline-scroll-btn timeline-scroll-left"
@@ -321,28 +342,27 @@
                     @foreach (var item in Model.TimelineEvents)
                     {
                         <div class="timeline-row case-timeline-horizontal-item">
-                            <div class="case-timeline-horizontal-dot"></div>
-                            <div style="display: grid; grid-template-columns: 82px 1fr; gap: 0.5rem; align-items: start;">
-                                <div style="font-weight: 600; color: #666; line-height: 1.4; white-space: nowrap;">
+                            <div class="timeline-event-content">
+
+                                <div class="timeline-event-date">
                                     @(string.IsNullOrWhiteSpace(item.DisplayDate)
                                         ? item.EventDate?.ToString("dd MMM yyyy")
                                         : item.DisplayDate)
                                 </div>
 
-                                <div>
-                                    <div style="font-weight: 600; color: #111; line-height: 1.4;">
-                                        @item.Title
-                                    </div>
+                                <div class="case-timeline-horizontal-dot"></div>
 
-                                    @if (!string.IsNullOrWhiteSpace(item.Description))
-                                    {
-                                        <!-- Timeline description block-->
-                                        <div class="timeline-popup"
-                                             style="margin-top: 0.5rem; max-width: 550px; padding: 0.85rem 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                                            <p style="margin: 0; line-height: 1.5;">@item.Description</p>
-                                        </div>
-                                    }
+                                <div class="timeline-event-title">
+                                    @item.Title
                                 </div>
+
+                                @if (!string.IsNullOrWhiteSpace(item.Description))
+                                {
+                                    <div class="timeline-popup">
+                                        <p>@item.Description</p>
+                                    </div>
+                                }
+
                             </div>
                         </div>
                     }
