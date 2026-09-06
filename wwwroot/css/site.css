@@ -833,8 +833,24 @@ body {
     pointer-events: none;
 }
 
+.header-nav-link {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+}
+
+.header-nav-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    text-decoration: none;
+}
+
 .header-search,
-.header-login {
+.header-login,
+.header-nav-link {
     pointer-events: auto;
 }
 

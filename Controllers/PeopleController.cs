@@ -15,6 +15,16 @@ namespace UKCrimeWeb.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var people = await _context.Person
+                .OrderBy(p => p.LastName)
+                .ThenBy(p => p.FirstName)
+                .ToListAsync();
+
+            return View(people);
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(int? caseId, string? role)
         {

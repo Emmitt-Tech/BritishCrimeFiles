@@ -17,6 +17,10 @@
            aria-label="British Crime Files home"></a>
         <div class="site-header-inner">
 
+            <a asp-controller="Cases" asp-action="Index" class="header-nav-link">
+                Cases
+            </a>
+
             <div class="header-search">
                 <form asp-controller="Cases" asp-action="Index" method="get">
                     <input type="text" name="search" placeholder="Search cases..." />
