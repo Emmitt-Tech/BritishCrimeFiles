@@ -24,7 +24,7 @@ namespace UKCrimeWeb.Controllers
                 return NotFound();
             }
 
-            var events = await _context.TimelineEvent
+            var events = await _context.TimelineEvents
                 .Where(te => te.CaseId == caseId)
                 .OrderBy(te => te.EventDate ?? DateTime.MaxValue)
                 .ThenBy(te => te.SortOrder ?? int.MaxValue)
@@ -66,7 +66,7 @@ namespace UKCrimeWeb.Controllers
 
             if (!ModelState.IsValid)
             {
-                var events = await _context.TimelineEvent
+                var events = await _context.TimelineEvents
                     .Where(te => te.CaseId == caseId)
                     .OrderBy(te => te.EventDate ?? DateTime.MaxValue)
                     .ThenBy(te => te.SortOrder ?? int.MaxValue)
@@ -87,11 +87,11 @@ namespace UKCrimeWeb.Controllers
                 });
             }
 
-            var nextSortOrder = (await _context.TimelineEvent
+            var nextSortOrder = (await _context.TimelineEvents
                 .Where(te => te.CaseId == caseId && te.EventDate == eventDate)
                 .MaxAsync(te => (int?)te.SortOrder) ?? 0) + 1;
 
-            _context.TimelineEvent.Add(new TimelineEvent
+            _context.TimelineEvents.Add(new TimelineEvent
             {
                 CaseId = caseId,
                 EventDate = eventDate,
@@ -107,7 +107,7 @@ namespace UKCrimeWeb.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var timelineEvent = await _context.TimelineEvent
+            var timelineEvent = await _context.TimelineEvents
                 .Include(te => te.Case)
                 .FirstOrDefaultAsync(te => te.Id == id);
 
@@ -123,7 +123,7 @@ namespace UKCrimeWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int caseId, string displayDate, string title, string? description)
         {
-            var timelineEvent = await _context.TimelineEvent.FindAsync(id);
+            var timelineEvent = await _context.TimelineEvents.FindAsync(id);
             if (timelineEvent == null || timelineEvent.CaseId != caseId)
             {
                 return NotFound();
@@ -166,14 +166,14 @@ namespace UKCrimeWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var timelineEvent = await _context.TimelineEvent.FindAsync(id);
+            var timelineEvent = await _context.TimelineEvents.FindAsync(id);
             if (timelineEvent == null)
             {
                 return NotFound();
             }
 
             var caseId = timelineEvent.CaseId;
-            _context.TimelineEvent.Remove(timelineEvent);
+            _context.TimelineEvents.Remove(timelineEvent);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index), new { caseId });
