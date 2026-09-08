@@ -76,6 +76,53 @@ namespace UKCrimeWeb.Controllers
 
             return RedirectToAction(nameof(Details), new { id = crimeCase.CaseId });
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var crimeCase = await _context.Case.FindAsync(id);
+
+            if (crimeCase == null)
+            {
+                return NotFound();
+            }
+
+            return View(crimeCase);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, Case crimeCase)
+        {
+            if (id != crimeCase.CaseId)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(crimeCase);
+            }
+
+            try
+            {
+                _context.Update(crimeCase);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _context.Case.AnyAsync(c => c.CaseId == id))
+                {
+                    return NotFound();
+                }
+
+                throw;
+            }
+
+            return RedirectToAction(nameof(Details), new { id = crimeCase.CaseId });
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var crimeCase = await _context.Case

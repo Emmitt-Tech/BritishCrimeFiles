@@ -1,12 +1,13 @@
 @model UKCrimeWeb.Models.Case
 
 @{
-    ViewData["Title"] = "Create Case";
+    ViewData["Title"] = "Edit case";
 }
 
-<h1>Create Case</h1>
+<h1>Edit case</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="CaseId" />
 
     <div class="mb-3">
         <label asp-for="Title" class="form-label"></label>
@@ -74,9 +75,13 @@
         <span asp-validation-for="SummaryFull" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create Case</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
 
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Details"
+       asp-route-id="@Model.CaseId"
+       class="btn btn-secondary">
+        Cancel
+    </a>
 </form>
 
 @section Scripts {
