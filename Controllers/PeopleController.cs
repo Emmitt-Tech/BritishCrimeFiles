@@ -71,6 +71,8 @@ namespace UKCrimeWeb.Controllers
             person.FirstName = model.FirstName;
             person.LastName = model.LastName;
             person.Nickname = model.Nickname;
+            person.Nickname = model.Nickname;
+            person.YearOfDeath = model.YearOfDeath;
             person.Biography = model.Biography;
 
             if (model.Photo != null && model.Photo.Length > 0)
