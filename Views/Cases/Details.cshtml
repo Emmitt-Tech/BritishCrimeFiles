@@ -246,6 +246,10 @@
             position: static;
         }
     }
+
+    .section-card h2 {
+        margin-top: 2rem;
+    }
 </style>
 <!-- END CSS -->
 
@@ -456,8 +460,7 @@
                 </details>
             }
 
-            <div class="people-group-heading">Victims</div>
-
+            <div class="people-group-heading" style="margin-top: 2.5rem;">Victims</div>
             @if (User.IsInRole("Admin"))
             {
                 <a asp-controller="People" asp-action="Create" asp-route-caseId="@Model.Case?.CaseId"
@@ -498,6 +501,10 @@
 
                                     <div class="linked-person-name-overlay">
                                         @displayName
+                                        @if (person.YearOfDeath.HasValue)
+                                        {
+                                            <span> · @person.YearOfDeath</span>
+                                        }
                                     </div>
                                 </div>
                             </a>
