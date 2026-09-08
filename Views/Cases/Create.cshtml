@@ -11,20 +11,74 @@
     <div class="mb-3">
         <label asp-for="Title" class="form-label"></label>
         <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Location" class="form-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label asp-for="YearStarted" class="form-label"></label>
+            <input asp-for="YearStarted" class="form-control" />
+            <span asp-validation-for="YearStarted" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label asp-for="YearEnded" class="form-label"></label>
+            <input asp-for="YearEnded" class="form-control" />
+            <span asp-validation-for="YearEnded" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="VictimCount" class="form-label"></label>
+            <input asp-for="VictimCount" class="form-control" />
+            <span asp-validation-for="VictimCount" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="Sentence" class="form-label"></label>
+            <input asp-for="Sentence" class="form-control" />
+            <span asp-validation-for="Sentence" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label asp-for="Status" class="form-label"></label>
+            <input asp-for="Status" class="form-control" />
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Location" class="form-label"></label>
-        <input asp-for="Location" class="form-control" />
+        <label asp-for="ImagePath" class="form-label"></label>
+        <input asp-for="ImagePath" class="form-control" />
+        <span asp-validation-for="ImagePath" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Summary" class="form-label"></label>
+        <label asp-for="Summary" class="form-label">Short summary</label>
         <textarea asp-for="Summary" class="form-control" rows="5"></textarea>
+        <div class="form-text">Shown first in the Overview section.</div>
+        <span asp-validation-for="Summary" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        Create Case
-    </button>
+    <div class="mb-3">
+        <label asp-for="SummaryFull" class="form-label">Full summary</label>
+        <textarea asp-for="SummaryFull" class="form-control" rows="14"></textarea>
+        <div class="form-text">Shown after the visitor selects Continue reading.</div>
+        <span asp-validation-for="SummaryFull" class="text-danger"></span>
+    </div>
 
+    <button type="submit" class="btn btn-primary">Create Case</button>
+
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
