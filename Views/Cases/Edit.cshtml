@@ -4,7 +4,16 @@
     ViewData["Title"] = "Edit case";
 }
 
-<h1>Edit case</h1>
+<div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+    <h1 class="mb-0">Edit case</h1>
+
+    <a asp-controller="TimelineEvents"
+       asp-action="Index"
+       asp-route-caseId="@Model.CaseId"
+       class="btn btn-outline-primary">
+        Edit timeline
+    </a>
+</div>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="CaseId" />
