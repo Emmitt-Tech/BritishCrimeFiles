@@ -278,6 +278,17 @@
     </div>
 </div>
 
+@if (User.IsInRole("Admin"))
+{
+    <div class="mt-3 mb-3">
+        <a asp-action="Edit"
+           asp-route-id="@Model.Case?.CaseId"
+           class="btn btn-outline-primary">
+            Edit case
+        </a>
+    </div>
+}
+
 <div class="case-facts-grid">
     @if (!string.IsNullOrWhiteSpace(Model.Case?.Location))
     {
