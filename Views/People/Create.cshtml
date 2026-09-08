@@ -59,6 +59,12 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="YearOfDeath" class="form-label">Year of death</label>
+        <input asp-for="YearOfDeath" class="form-control" />
+        <span asp-validation-for="YearOfDeath" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="SortOrder" class="form-label">Order</label>
         <input asp-for="SortOrder" class="form-control" type="number" min="1" />
     </div>

@@ -139,6 +139,7 @@ namespace UKCrimeWeb.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Nickname = model.Nickname,
+                YearOfDeath = model.YearOfDeath,
                 PhotoPath = photoPath
             };
 
