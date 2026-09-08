@@ -11,6 +11,8 @@ namespace UKCrimeWeb.Models
         public string? LastName { get; set; }
 
         public string? Nickname { get; set; }
+
+        public int? YearOfDeath { get; set; }
         public string? Biography { get; set; }
         public string? ExistingPhotoPath { get; set; }
 

@@ -176,6 +176,7 @@ namespace UKCrimeWeb.Controllers
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 Nickname = person.Nickname,
+                YearOfDeath = person.YearOfDeath,
                 Biography = person.Biography,
                 ExistingPhotoPath = person.PhotoPath
             };
