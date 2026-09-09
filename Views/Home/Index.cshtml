@@ -1,32 +1,408 @@
 ﻿@model List<UKCrimeWeb.Models.Case>
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "British Crime Files";
+
+    var featuredCase = Model.FirstOrDefault();
+    var otherCases = Model.Skip(1).Take(7).ToList();
 }
 
-<div class="case-grid">
-    @foreach (var crimeCase in Model)
-    {
-        <a class="case-card" asp-controller="Cases" asp-action="Details" asp-route-id="@crimeCase.CaseId">
+<style>
+    .home-discovery {
+        display: grid;
+        gap: 2.75rem;
+        padding-bottom: 2rem;
+    }
 
-            <div class="case-card-image">
-                @if (!string.IsNullOrWhiteSpace(crimeCase.ImagePath))
+    .home-intro {
+        max-width: 760px;
+        padding-top: 1rem;
+    }
+
+    .home-kicker {
+        margin-bottom: 0.55rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #777;
+    }
+
+    .home-intro h1 {
+        margin: 0 0 0.8rem 0;
+        font-size: clamp(2.2rem, 5vw, 4.4rem);
+        line-height: 0.98;
+        letter-spacing: -0.035em;
+    }
+
+    .home-intro p {
+        margin: 0;
+        max-width: 680px;
+        font-size: 1.08rem;
+        line-height: 1.7;
+        color: #555;
+    }
+
+    .home-primary-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 1.35rem;
+    }
+
+    .home-primary-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.72rem 1rem;
+        border: 1px solid #222;
+        border-radius: 999px;
+        color: #111;
+        text-decoration: none;
+        font-weight: 600;
+        background: #fff;
+    }
+
+    .home-primary-link:hover {
+        background: #111;
+        color: #fff;
+    }
+
+    .home-feature {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
+        min-height: 430px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .home-feature-image {
+        position: relative;
+        min-height: 430px;
+        background: #222;
+    }
+
+    .home-feature-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .home-feature-image .no-photo {
+        min-height: 430px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+    }
+
+    .home-feature-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .home-feature-label {
+        margin-bottom: 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: #777;
+    }
+
+    .home-feature-copy h2 {
+        margin: 0 0 0.75rem 0;
+        font-size: clamp(1.9rem, 3vw, 3rem);
+        line-height: 1.05;
+    }
+
+    .home-feature-meta {
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        color: #777;
+    }
+
+    .home-feature-summary {
+        margin: 0 0 1.35rem 0;
+        line-height: 1.65;
+        color: #444;
+    }
+
+    .home-feature-read {
+        align-self: flex-start;
+        color: #111;
+        font-weight: 700;
+        text-decoration: none;
+        border-bottom: 1px solid #111;
+        padding-bottom: 2px;
+    }
+
+    .home-section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: baseline;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0.7rem;
+    }
+
+    .home-section-header h2 {
+        margin: 0;
+        font-size: 1.55rem;
+    }
+
+    .home-section-header a {
+        color: #555;
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .home-case-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: 1px solid #eee;
+    }
+
+    .home-case-row {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem 0;
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .home-case-row:nth-child(odd) {
+        padding-right: 1.25rem;
+    }
+
+    .home-case-row:nth-child(even) {
+        padding-left: 1.25rem;
+        border-left: 1px solid #eee;
+    }
+
+    .home-case-thumb {
+        width: 92px;
+        height: 70px;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #eee;
+    }
+
+    .home-case-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .home-case-row-title {
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .home-case-row-meta {
+        font-size: 0.9rem;
+        color: #777;
+        line-height: 1.4;
+    }
+
+    .home-discovery-band {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .home-discovery-link {
+        display: block;
+        padding: 1.4rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fafafa;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .home-discovery-link strong {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-size: 1.1rem;
+    }
+
+    .home-discovery-link span {
+        color: #666;
+        line-height: 1.5;
+    }
+
+    @@media (max-width: 900px) {
+        .home-feature {
+            grid-template-columns: 1fr;
+        }
+
+        .home-feature-image,
+        .home-feature-image .no-photo {
+            min-height: 300px;
+        }
+
+        .home-case-list {
+            grid-template-columns: 1fr;
+        }
+
+        .home-case-row,
+        .home-case-row:nth-child(odd),
+        .home-case-row:nth-child(even) {
+            padding-left: 0;
+            padding-right: 0;
+            border-left: none;
+        }
+
+        .home-discovery-band {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .home-case-row {
+            grid-template-columns: 78px minmax(0, 1fr);
+        }
+
+        .home-case-thumb {
+            width: 78px;
+            height: 62px;
+        }
+    }
+</style>
+
+<div class="home-discovery">
+    <header class="home-intro">
+        <div class="home-kicker">British Crime Files</div>
+        <h1>Cases, people and the record behind them.</h1>
+        <p>
+            Explore documented British criminal cases through case histories, victim and offender profiles,
+            timelines and source material.
+        </p>
+
+        <div class="home-primary-links">
+            <a asp-controller="Cases" asp-action="Index" class="home-primary-link">Browse cases →</a>
+            <a asp-controller="People" asp-action="Index" class="home-primary-link">Browse people →</a>
+        </div>
+    </header>
+
+    @if (featuredCase != null)
+    {
+        <section class="home-feature" aria-labelledby="featured-case-heading">
+            <div class="home-feature-image">
+                @if (!string.IsNullOrWhiteSpace(featuredCase.ImagePath))
                 {
-                    <img src="@crimeCase.ImagePath" alt="@crimeCase.Title" />
+                    <img src="@featuredCase.ImagePath" alt="@featuredCase.Title" />
                 }
                 else
                 {
                     <div class="no-photo">No image</div>
                 }
-
-                <div class="case-card-overlay">
-                    <div class="case-card-title">@crimeCase.Title</div>
-
-                   
-                </div>
             </div>
 
-        
-        </a>
+            <div class="home-feature-copy">
+                <div class="home-feature-label">Featured case</div>
+                <h2 id="featured-case-heading">@featuredCase.Title</h2>
+
+                <div class="home-feature-meta">
+                    @featuredCase.Location
+                    @if (featuredCase.YearStarted != null || featuredCase.YearEnded != null)
+                    {
+                        <span> · </span>
+                        <span>@featuredCase.YearStarted</span>
+                        @if (featuredCase.YearStarted != null && featuredCase.YearEnded != null)
+                        {
+                            <span>–</span>
+                        }
+                        <span>@featuredCase.YearEnded</span>
+                    }
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(featuredCase.Summary))
+                {
+                    <p class="home-feature-summary">@featuredCase.Summary</p>
+                }
+
+                <a asp-controller="Cases"
+                   asp-action="Details"
+                   asp-route-id="@featuredCase.CaseId"
+                   class="home-feature-read">
+                    Read case file →
+                </a>
+            </div>
+        </section>
     }
+
+    @if (otherCases.Any())
+    {
+        <section>
+            <div class="home-section-header">
+                <h2>Explore the archive</h2>
+                <a asp-controller="Cases" asp-action="Index">View all cases →</a>
+            </div>
+
+            <div class="home-case-list">
+                @foreach (var crimeCase in otherCases)
+                {
+                    <a class="home-case-row"
+                       asp-controller="Cases"
+                       asp-action="Details"
+                       asp-route-id="@crimeCase.CaseId">
+
+                        <div class="home-case-thumb">
+                            @if (!string.IsNullOrWhiteSpace(crimeCase.ImagePath))
+                            {
+                                <img src="@crimeCase.ImagePath" alt="" />
+                            }
+                        </div>
+
+                        <div>
+                            <div class="home-case-row-title">@crimeCase.Title</div>
+                            <div class="home-case-row-meta">
+                                @crimeCase.Location
+                                @if (crimeCase.YearStarted != null)
+                                {
+                                    <span> · @crimeCase.YearStarted</span>
+                                }
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </section>
+    }
+
+    <section>
+        <div class="home-section-header">
+            <h2>Find your way in</h2>
+        </div>
+
+        <div class="home-discovery-band">
+            <a asp-controller="Cases" asp-action="Index" class="home-discovery-link">
+                <strong>Cases</strong>
+                <span>Browse the archive by case rather than relying on search.</span>
+            </a>
+
+            <a asp-controller="People" asp-action="Index" class="home-discovery-link">
+                <strong>People</strong>
+                <span>Find victims, offenders and others connected to the cases.</span>
+            </a>
+
+            <a asp-controller="Home" asp-action="Index" class="home-discovery-link">
+                <strong>Recently added</strong>
+                <span>Return to the latest material currently available in the archive.</span>
+            </a>
+        </div>
+    </section>
 </div>
