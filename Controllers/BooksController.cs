@@ -48,6 +48,10 @@ namespace UKCrimeWeb.Controllers
             {
                 Title = model.Title,
                 Author = model.Author,
+                YearPublished = model.YearPublished,
+                ISBN = model.ISBN,
+                InPrint = model.InPrint,
+                GoodreadsRating = model.GoodreadsRating,
                 PurchaseUrl = model.PurchaseUrl,
                 ImageUrl = model.ImageUrl
             };
@@ -85,6 +89,10 @@ namespace UKCrimeWeb.Controllers
                 BookId = book.BookId,
                 Title = book.Title,
                 Author = book.Author,
+                YearPublished = book.YearPublished,
+                ISBN = book.ISBN,
+                InPrint = book.InPrint,
+                GoodreadsRating = book.GoodreadsRating,
                 PurchaseUrl = book.PurchaseUrl,
                 ImageUrl = book.ImageUrl,
                 SelectedPersonIds = book.PersonBooks
@@ -117,6 +125,10 @@ namespace UKCrimeWeb.Controllers
 
             book.Title = model.Title;
             book.Author = model.Author;
+            book.YearPublished = model.YearPublished;
+            book.ISBN = model.ISBN;
+            book.InPrint = model.InPrint;
+            book.GoodreadsRating = model.GoodreadsRating;
             book.PurchaseUrl = model.PurchaseUrl;
             book.ImageUrl = model.ImageUrl;
 
