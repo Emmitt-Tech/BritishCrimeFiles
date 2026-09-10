@@ -1,0 +1,41 @@
+@model UKCrimeWeb.Models.BookViewModel
+
+@{
+    ViewData["Title"] = "Add Book";
+}
+
+<h1>Add Book</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Author" class="form-label"></label>
+        <input asp-for="Author" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PurchaseUrl" class="form-label">Purchase URL</label>
+        <input asp-for="PurchaseUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label">Image URL</label>
+        <input asp-for="ImageUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SelectedPersonIds" class="form-label">Link to people</label>
+        <select asp-for="SelectedPersonIds" asp-items="Model.People" class="form-select" multiple size="10"></select>
+        <div class="form-text">Hold Ctrl to select more than one person.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add book</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>
