@@ -71,6 +71,18 @@ namespace UKCrimeWeb.Controllers
                 return View(crimeCase);
             }
 
+            if (crimeCase.IsFeatured)
+            {
+                var previouslyFeatured = await _context.Case
+                    .Where(c => c.IsFeatured)
+                    .ToListAsync();
+
+                foreach (var existingCase in previouslyFeatured)
+                {
+                    existingCase.IsFeatured = false;
+                }
+            }
+
             _context.Case.Add(crimeCase);
             await _context.SaveChangesAsync();
 
@@ -107,6 +119,18 @@ namespace UKCrimeWeb.Controllers
 
             try
             {
+                if (crimeCase.IsFeatured)
+                {
+                    var previouslyFeatured = await _context.Case
+                        .Where(c => c.IsFeatured && c.CaseId != crimeCase.CaseId)
+                        .ToListAsync();
+
+                    foreach (var existingCase in previouslyFeatured)
+                    {
+                        existingCase.IsFeatured = false;
+                    }
+                }
+
                 _context.Update(crimeCase);
                 await _context.SaveChangesAsync();
             }
