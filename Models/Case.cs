@@ -23,6 +23,8 @@ namespace UKCrimeWeb.Models
         public string? Sentence { get; set; }
         public string? Status { get; set; }
 
+        public bool IsFeatured { get; set; }
+
         public ICollection<TimelineEvent> TimelineEvents { get; set; } = new List<TimelineEvent>();
     }
 }
