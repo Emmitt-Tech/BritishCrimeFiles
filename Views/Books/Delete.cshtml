@@ -1,0 +1,39 @@
+@model UKCrimeWeb.Models.Book
+
+@{
+    ViewData["Title"] = "Delete Book";
+}
+
+<h1>Delete Book</h1>
+
+<div class="alert alert-warning" role="alert">
+    This will permanently delete the book and remove its links to any people.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Title</dt>
+    <dd class="col-sm-10">@Model.Title</dd>
+
+    <dt class="col-sm-2">Author</dt>
+    <dd class="col-sm-10">@Model.Author</dd>
+
+    <dt class="col-sm-2">Linked people</dt>
+    <dd class="col-sm-10">
+        @if (Model.PersonBooks.Any())
+        {
+            @string.Join(", ", Model.PersonBooks
+                .Where(pb => pb.Person != null)
+                .Select(pb => $"{pb.Person!.FirstName} {pb.Person.LastName}".Trim()))
+        }
+        else
+        {
+            <span class="text-muted">None</span>
+        }
+    </dd>
+</dl>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.BookId" />
+    <button type="submit" class="btn btn-danger">Delete book</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>
