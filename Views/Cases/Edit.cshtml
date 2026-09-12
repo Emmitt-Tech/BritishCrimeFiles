@@ -70,6 +70,12 @@
         <span asp-validation-for="ImagePath" class="text-danger"></span>
     </div>
 
+    <div class="form-check mb-3">
+        <input asp-for="IsFeatured" class="form-check-input" />
+        <label asp-for="IsFeatured" class="form-check-label">Featured case</label>
+        <div class="form-text">If selected, this case will appear in the Featured case position on the home page. Selecting it will automatically replace the previous featured case.</div>
+    </div>
+
     <div class="mb-3">
         <label asp-for="Summary" class="form-label">Short summary</label>
         <textarea asp-for="Summary" class="form-control" rows="5"></textarea>
