@@ -2,31 +2,120 @@
 
 @{
     ViewData["Title"] = "Home";
+    var featuredCase = Model.FirstOrDefault();
+    var recentCases = Model.Skip(1).Take(5).ToList();
 }
 
-<div class="case-grid">
-    @foreach (var crimeCase in Model)
-    {
-        <a class="case-card" asp-controller="Cases" asp-action="Details" asp-route-id="@crimeCase.CaseId">
+<section class="home-intro">
+    <div class="home-intro-kicker">British Crime Files</div>
+    <h1>Cases, people and the stories behind them.</h1>
+    <p>
+        Explore major British criminal cases through concise case histories, timelines,
+        biographies and related material.
+    </p>
+</section>
 
-            <div class="case-card-image">
-                @if (!string.IsNullOrWhiteSpace(crimeCase.ImagePath))
+@if (featuredCase != null)
+{
+    <section class="home-featured" aria-labelledby="featured-heading">
+        <div class="home-section-heading">
+            <span>Featured case</span>
+        </div>
+
+        <a class="home-featured-link"
+           asp-controller="Cases"
+           asp-action="Details"
+           asp-route-id="@featuredCase.CaseId">
+
+            <div class="home-featured-image">
+                @if (!string.IsNullOrWhiteSpace(featuredCase.ImagePath))
                 {
-                    <img src="@crimeCase.ImagePath" alt="@crimeCase.Title" />
+                    <img src="@featuredCase.ImagePath" alt="@featuredCase.Title" />
                 }
                 else
                 {
                     <div class="no-photo">No image</div>
                 }
-
-                <div class="case-card-overlay">
-                    <div class="case-card-title">@crimeCase.Title</div>
-
-                   
-                </div>
             </div>
 
-        
+            <div class="home-featured-copy">
+                <div class="home-featured-label">Case file</div>
+                <h2 id="featured-heading">@featuredCase.Title</h2>
+
+                @if (!string.IsNullOrWhiteSpace(featuredCase.Location))
+                {
+                    <div class="home-featured-meta">@featuredCase.Location</div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(featuredCase.Summary))
+                {
+                    <p>@featuredCase.Summary</p>
+                }
+
+                <span class="home-read-link">Read the case file</span>
+            </div>
         </a>
-    }
-</div>
+    </section>
+}
+
+<section class="home-browse" aria-labelledby="browse-heading">
+    <div class="home-section-heading">
+        <span id="browse-heading">Browse the archive</span>
+    </div>
+
+    <div class="home-browse-grid">
+        <a class="home-browse-link" asp-controller="Cases" asp-action="Index">
+            <span class="home-browse-label">Cases</span>
+            <strong>Browse all case files</strong>
+            <span>Explore the archive by case and use search to find a specific investigation.</span>
+            <span class="home-browse-arrow">View cases →</span>
+        </a>
+
+        <a class="home-browse-link" asp-controller="People" asp-action="Index">
+            <span class="home-browse-label">People</span>
+            <strong>Browse people</strong>
+            <span>Find biographies and the people connected with cases across the archive.</span>
+            <span class="home-browse-arrow">View people →</span>
+        </a>
+    </div>
+</section>
+
+@if (recentCases.Any())
+{
+    <section class="home-recent" aria-labelledby="recent-heading">
+        <div class="home-section-heading home-section-heading-with-link">
+            <span id="recent-heading">More case files</span>
+            <a asp-controller="Cases" asp-action="Index">View all cases</a>
+        </div>
+
+        <div class="home-recent-list">
+            @foreach (var crimeCase in recentCases)
+            {
+                <a class="home-recent-item"
+                   asp-controller="Cases"
+                   asp-action="Details"
+                   asp-route-id="@crimeCase.CaseId">
+
+                    <div class="home-recent-image">
+                        @if (!string.IsNullOrWhiteSpace(crimeCase.ImagePath))
+                        {
+                            <img src="@crimeCase.ImagePath" alt="@crimeCase.Title" />
+                        }
+                        else
+                        {
+                            <div class="no-photo">No image</div>
+                        }
+                    </div>
+
+                    <div class="home-recent-copy">
+                        <h3>@crimeCase.Title</h3>
+                        @if (!string.IsNullOrWhiteSpace(crimeCase.Location))
+                        {
+                            <span>@crimeCase.Location</span>
+                        }
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
+}
