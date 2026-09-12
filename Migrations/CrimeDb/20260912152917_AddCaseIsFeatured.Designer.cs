@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UKCrimeWeb.Models;
 
@@ -11,9 +12,11 @@ using UKCrimeWeb.Models;
 namespace UKCrimeWeb.Migrations.CrimeDb
 {
     [DbContext(typeof(CrimeDbContext))]
-    partial class CrimeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912152917_AddCaseIsFeatured")]
+    partial class AddCaseIsFeatured
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
