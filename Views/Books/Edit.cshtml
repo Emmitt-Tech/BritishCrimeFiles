@@ -1,0 +1,67 @@
+@model UKCrimeWeb.Models.BookViewModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h1>Edit Book</h1>
+
+<form asp-action="Edit" method="post">
+    <input asp-for="BookId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Author" class="form-label"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="YearPublished" class="form-label">Year published</label>
+        <input asp-for="YearPublished" class="form-control" type="number" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ISBN" class="form-label"></label>
+        <input asp-for="ISBN" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="InPrint" class="form-label">In print</label>
+        <select asp-for="InPrint" class="form-select">
+            <option value="">Unknown / not set</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GoodreadsRating" class="form-label">Goodreads rating</label>
+        <input asp-for="GoodreadsRating" class="form-control" type="number" step="0.01" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PurchaseUrl" class="form-label">Purchase URL</label>
+        <input asp-for="PurchaseUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label">Image URL</label>
+        <input asp-for="ImageUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SelectedPersonIds" class="form-label">Linked people</label>
+        <select asp-for="SelectedPersonIds" asp-items="Model.People" class="form-select" multiple size="10"></select>
+        <div class="form-text">Hold Ctrl to select more than one person.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

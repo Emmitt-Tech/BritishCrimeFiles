@@ -1,0 +1,62 @@
+@model IEnumerable<UKCrimeWeb.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Books</h1>
+
+    <a asp-controller="Books" asp-action="Create" class="btn btn-primary">
+        Add book
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <p>No books found.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Linked people</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>
+                            @if (book.PersonBooks.Any())
+                            {
+                                @string.Join(", ", book.PersonBooks
+                                    .Where(pb => pb.Person != null)
+                                    .Select(pb => $"{pb.Person!.FirstName} {pb.Person.LastName}".Trim()))
+                            }
+                            else
+                            {
+                                <span class="text-muted">None</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+                            <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-danger ms-1">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
