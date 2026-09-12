@@ -16,10 +16,38 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var cases = await _context.Case
+        var featuredCase = await _context.Case
+            .Where(c => c.IsFeatured)
+            .OrderBy(c => c.CaseId)
+            .FirstOrDefaultAsync();
+
+        featuredCase ??= await _context.Case
             .OrderByDescending(c => c.YearStarted)
-            .Take(12)
+            .ThenByDescending(c => c.CaseId)
+            .FirstOrDefaultAsync();
+
+        var remainingCasesQuery = _context.Case.AsQueryable();
+
+        if (featuredCase != null)
+        {
+            remainingCasesQuery = remainingCasesQuery
+                .Where(c => c.CaseId != featuredCase.CaseId);
+        }
+
+        var remainingCases = await remainingCasesQuery
+            .OrderByDescending(c => c.YearStarted)
+            .ThenByDescending(c => c.CaseId)
+            .Take(11)
             .ToListAsync();
+
+        var cases = new List<Case>();
+
+        if (featuredCase != null)
+        {
+            cases.Add(featuredCase);
+        }
+
+        cases.AddRange(remainingCases);
 
         return View(cases);
     }
