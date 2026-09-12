@@ -6,15 +6,6 @@
     var recentCases = Model.Skip(1).Take(5).ToList();
 }
 
-<section class="home-intro">
-    <div class="home-intro-kicker">British Crime Files</div>
-    <h1>Cases, people and the stories behind them.</h1>
-    <p>
-        Explore major British criminal cases through concise case histories, timelines,
-        biographies and related material.
-    </p>
-</section>
-
 @if (featuredCase != null)
 {
     <section class="home-featured" aria-labelledby="featured-heading">
