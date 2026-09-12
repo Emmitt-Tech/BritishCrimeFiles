@@ -155,6 +155,45 @@ namespace UKCrimeWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var book = await _context.Books
+                .Include(b => b.PersonBooks)
+                .ThenInclude(pb => pb.Person)
+                .FirstOrDefaultAsync(b => b.BookId == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var book = await _context.Books
+                .Include(b => b.PersonBooks)
+                .FirstOrDefaultAsync(b => b.BookId == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            if (book.PersonBooks.Any())
+            {
+                _context.PersonBook.RemoveRange(book.PersonBooks);
+            }
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private async Task PopulatePeople(BookViewModel model)
         {
             var people = await _context.Person
