@@ -50,6 +50,9 @@ else
                             <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-primary">
                                 Edit
                             </a>
+                            <a asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-danger ms-1">
+                                Delete
+                            </a>
                         </td>
                     </tr>
                 }
