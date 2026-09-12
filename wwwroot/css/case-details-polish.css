@@ -1,0 +1,128 @@
+/* Case details page polish
+   Deliberately restrained: editorial/documentary rather than card-heavy UI. */
+
+/* Tighten the vertical rhythm through the case page. */
+.case-details-columns > section {
+    margin-top: 2rem !important;
+}
+
+.case-details-columns .section-card {
+    margin-top: 1.5rem;
+}
+
+.case-details-columns .section-card h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.65rem;
+}
+
+.case-details-columns .people-group-heading {
+    margin-bottom: 0.85rem;
+}
+
+.case-details-columns .linked-people-grid {
+    margin-bottom: 1.5rem;
+}
+
+.case-details-columns .case-overview {
+    max-width: 860px;
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+}
+
+.case-details-columns .case-overview-expanded {
+    max-width: 860px;
+    margin-top: 1rem;
+    line-height: 1.7;
+}
+
+/* Make Continue reading feel like a deliberate editorial control. */
+.case-details-columns .case-overview-full {
+    margin-top: 0.75rem;
+}
+
+.case-details-columns .overview-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 0;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid #1f2937;
+    border-radius: 3px;
+    background: #fff;
+    color: #111827;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.case-details-columns .overview-toggle:hover {
+    background: #111827;
+    color: #fff;
+}
+
+.case-details-columns .overview-toggle-text {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.case-details-columns .overview-toggle::after {
+    content: "↓";
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.case-details-columns .case-overview-full[open] .overview-toggle::after {
+    content: "↑";
+}
+
+/* Pull the lower sections together so the page does not feel stretched out. */
+.case-details-columns .section-divider {
+    margin: 2rem 0 1.5rem;
+}
+
+.case-details-columns .books-section {
+    margin-bottom: 1.75rem;
+}
+
+/* The final navigation should look intentional rather than like a stray hyperlink. */
+.case-details-columns > p {
+    margin: 2rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.case-details-columns > p > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #1f2937;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.case-details-columns > p > a::before {
+    content: "←";
+}
+
+.case-details-columns > p > a:hover {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+    .case-details-columns > section {
+        margin-top: 1.5rem !important;
+    }
+
+    .case-details-columns .section-card {
+        margin-top: 1rem;
+    }
+
+    .case-details-columns .overview-toggle {
+        padding: 0.5rem 0.7rem;
+    }
+}
