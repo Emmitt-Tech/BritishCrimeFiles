@@ -1,0 +1,75 @@
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<section class="contact-page py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <header class="mb-4">
+                <p class="text-uppercase small text-muted mb-2">British Crime Files</p>
+                <h1 class="display-5 mb-3">Contact</h1>
+                <p class="lead mb-0">
+                    We welcome corrections, additional information and enquiries relating to material published on British Crime Files.
+                </p>
+            </header>
+
+            <div class="mb-4">
+                <p>
+                    If you are a relative of somebody featured on the site, or are otherwise directly connected with a case,
+                    please indicate this when contacting us.
+                </p>
+                <p class="text-muted mb-0">
+                    Messages are reviewed regularly, but we cannot guarantee a response to every enquiry.
+                </p>
+            </div>
+
+            <form method="post" action="#" class="contact-form">
+                <div class="mb-3">
+                    <label for="contactCategory" class="form-label">Reason for contact</label>
+                    <select id="contactCategory" name="Category" class="form-select" required>
+                        <option value="" selected disabled>Please choose...</option>
+                        <option>Correction or factual error</option>
+                        <option>Information about a case</option>
+                        <option>Photograph or copyright enquiry</option>
+                        <option>Family member or person connected with a case</option>
+                        <option>Media or documentary enquiry</option>
+                        <option>Technical problem with the website</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactName" class="form-label">Name</label>
+                    <input id="contactName" name="Name" type="text" class="form-control" autocomplete="name" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactEmail" class="form-label">Email address</label>
+                    <input id="contactEmail" name="Email" type="email" class="form-control" autocomplete="email" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactPageUrl" class="form-label">Page this relates to <span class="text-muted">(optional)</span></label>
+                    <input id="contactPageUrl" name="PageUrl" type="url" class="form-control" placeholder="https://britishcrimefiles.com/..." />
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactSubject" class="form-label">Subject</label>
+                    <input id="contactSubject" name="Subject" type="text" class="form-control" required />
+                </div>
+
+                <div class="mb-4">
+                    <label for="contactMessage" class="form-label">Message</label>
+                    <textarea id="contactMessage" name="Message" class="form-control" rows="8" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-dark px-4" disabled aria-disabled="true">
+                    Send message
+                </button>
+                <p class="small text-muted mt-3 mb-0">
+                    The contact form is being prepared and is not yet accepting submissions.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
